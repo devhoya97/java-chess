@@ -5,7 +5,7 @@ import chess.command.Command;
 import chess.command.CommandType;
 import chess.domain.CurrentTurn;
 import chess.domain.board.ChessBoardMaker;
-import chess.domain.position.PathFinder;
+import chess.domain.position.Path;
 import chess.domain.square.piece.Color;
 import chess.util.ExceptionRetryHandler;
 import chess.view.InputView;
@@ -69,8 +69,8 @@ public class ChessController {
     }
 
     private void movePlayerPiece(Command command, ChessGame chessGame) {
-        PathFinder pathFinder = new PathFinder(command.getStartPosition(), command.getTargetPosition());
-        chessGame.move(pathFinder);
+        Path path = new Path(command.getStartPosition(), command.getTargetPosition());
+        chessGame.move(path);
 
         outputView.printChessBoard(chessGame.getBoard());
     }

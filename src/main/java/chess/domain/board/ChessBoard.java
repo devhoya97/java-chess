@@ -1,6 +1,6 @@
 package chess.domain.board;
 
-import chess.domain.position.PathFinder;
+import chess.domain.position.Path;
 import chess.domain.position.Position;
 import chess.domain.square.Empty;
 import chess.domain.square.Square;
@@ -16,16 +16,16 @@ public class ChessBoard {
         this.squares = new HashMap<>(squares);
     }
 
-    public void move(PathFinder pathFinder) {
-        Square startSquare = squares.get(pathFinder.startPosition());
-        validateCanMove(startSquare, pathFinder);
+    public void move(Path path) {
+        Square startSquare = squares.get(path.startPosition());
+        validateCanMove(startSquare, path);
 
-        squares.put(pathFinder.targetPosition(), startSquare);
-        squares.put(pathFinder.startPosition(), Empty.getInstance());
+        squares.put(path.targetPosition(), startSquare);
+        squares.put(path.startPosition(), Empty.getInstance());
     }
 
-    private void validateCanMove(Square startSquare, PathFinder pathFinder) {
-        if (!startSquare.canArrive(pathFinder, squares)) {
+    private void validateCanMove(Square startSquare, Path path) {
+        if (!startSquare.canArrive(path, squares)) {
             throw new IllegalArgumentException("해당 위치로 움직일 수 없습니다.");
         }
     }

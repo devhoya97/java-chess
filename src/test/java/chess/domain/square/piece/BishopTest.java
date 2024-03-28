@@ -4,7 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import chess.domain.EmptySquaresMaker;
 import chess.domain.position.File;
-import chess.domain.position.PathFinder;
+import chess.domain.position.Path;
 import chess.domain.position.Position;
 import chess.domain.position.Rank;
 import chess.domain.square.Square;
@@ -21,9 +21,9 @@ class BishopTest {
         final Map<Position, Square> board = EmptySquaresMaker.make();
         Piece piece = Bishop.from(Color.WHITE);
         board.put(new Position(Rank.FIRST, File.A), piece);
-        PathFinder pathFinder = new PathFinder(new Position(Rank.FIRST, File.A), new Position(Rank.THIRD, File.C));
+        Path path = new Path(new Position(Rank.FIRST, File.A), new Position(Rank.THIRD, File.C));
 
-        final boolean canMove = piece.canArrive(pathFinder, board);
+        final boolean canMove = piece.canArrive(path, board);
 
         assertThat(canMove).isTrue();
     }
@@ -34,9 +34,9 @@ class BishopTest {
         final Map<Position, Square> board = EmptySquaresMaker.make();
         Piece piece = Bishop.from(Color.WHITE);
         board.put(new Position(Rank.FIRST, File.A), piece);
-        PathFinder pathFinder = new PathFinder(new Position(Rank.FIRST, File.A), new Position(Rank.FIRST, File.C));
+        Path path = new Path(new Position(Rank.FIRST, File.A), new Position(Rank.FIRST, File.C));
 
-        final boolean canMove = piece.canArrive(pathFinder, board);
+        final boolean canMove = piece.canArrive(path, board);
 
         assertThat(canMove).isFalse();
     }
@@ -49,9 +49,9 @@ class BishopTest {
         Piece obstacle = Bishop.from(Color.BLACK);
         board.put(new Position(Rank.FIRST, File.A), piece);
         board.put(new Position(Rank.SECOND, File.B), obstacle);
-        PathFinder pathFinder = new PathFinder(new Position(Rank.FIRST, File.A), new Position(Rank.THIRD, File.C));
+        Path path = new Path(new Position(Rank.FIRST, File.A), new Position(Rank.THIRD, File.C));
 
-        final boolean canMove = piece.canArrive(pathFinder, board);
+        final boolean canMove = piece.canArrive(path, board);
 
         assertThat(canMove).isFalse();
     }
@@ -64,9 +64,9 @@ class BishopTest {
         Piece attackedPiece = Bishop.from(Color.BLACK);
         board.put(new Position(Rank.FIRST, File.A), attackerPiece);
         board.put(new Position(Rank.THIRD, File.C), attackedPiece);
-        PathFinder pathFinder = new PathFinder(new Position(Rank.FIRST, File.A), new Position(Rank.THIRD, File.C));
+        Path path = new Path(new Position(Rank.FIRST, File.A), new Position(Rank.THIRD, File.C));
 
-        final boolean canMove = attackerPiece.canArrive(pathFinder, board);
+        final boolean canMove = attackerPiece.canArrive(path, board);
 
         assertThat(canMove).isTrue();
     }

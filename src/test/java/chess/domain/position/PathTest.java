@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
-class PathFinderTest {
+class PathTest {
 
     @DisplayName("랭크 방향으로 직선 경로를 찾는다.")
     @Test
@@ -17,8 +17,8 @@ class PathFinderTest {
         final Position target = new Position(Rank.FOURTH, File.A);
         final Set<Position> expected = Set.of(new Position(Rank.SECOND, File.A), new Position(Rank.THIRD, File.A));
 
-        final PathFinder pathFinder = new PathFinder(start, target);
-        final Set<Position> foundPath = pathFinder.find();
+        final Path path = new Path(start, target);
+        final Set<Position> foundPath = path.positions();
 
         assertThat(foundPath).isEqualTo(expected);
     }
@@ -30,8 +30,8 @@ class PathFinderTest {
         final Position target = new Position(Rank.FIRST, File.D);
         final Set<Position> expected = Set.of(new Position(Rank.FIRST, File.B), new Position(Rank.FIRST, File.C));
 
-        final PathFinder pathFinder = new PathFinder(start, target);
-        final Set<Position> foundPath = pathFinder.find();
+        final Path path = new Path(start, target);
+        final Set<Position> foundPath = path.positions();
 
         assertThat(foundPath).isEqualTo(expected);
     }
@@ -43,8 +43,8 @@ class PathFinderTest {
         final Position target = new Position(Rank.FOURTH, File.D);
         final Set<Position> expected = Set.of(new Position(Rank.SECOND, File.B), new Position(Rank.THIRD, File.C));
 
-        final PathFinder pathFinder = new PathFinder(start, target);
-        final Set<Position> foundPath = pathFinder.find();
+        final Path path = new Path(start, target);
+        final Set<Position> foundPath = path.positions();
 
         assertThat(foundPath).isEqualTo(expected);
     }
@@ -56,8 +56,8 @@ class PathFinderTest {
         final Position target = new Position(Rank.FIRST, File.D);
         final Set<Position> expected = Set.of(new Position(Rank.THIRD, File.B), new Position(Rank.SECOND, File.C));
 
-        final PathFinder pathFinder = new PathFinder(start, target);
-        final Set<Position> foundPath = pathFinder.find();
+        final Path path = new Path(start, target);
+        final Set<Position> foundPath = path.positions();
 
         assertThat(foundPath).isEqualTo(expected);
     }
@@ -73,8 +73,8 @@ class PathFinderTest {
         final Position start = new Position(startRank, startFile);
         final Position target = new Position(targetRank, targetFile);
 
-        final PathFinder pathFinder = new PathFinder(start, target);
-        final boolean isStraight = pathFinder.isStraight();
+        final Path path = new Path(start, target);
+        final boolean isStraight = path.isStraight();
 
         assertThat(isStraight).isEqualTo(expected);
     }
@@ -93,8 +93,8 @@ class PathFinderTest {
         final Position start = new Position(startRank, startFile);
         final Position target = new Position(targetRank, targetFile);
 
-        final PathFinder pathFinder = new PathFinder(start, target);
-        final boolean isStraight = pathFinder.isStraight(maxDistance);
+        final Path path = new Path(start, target);
+        final boolean isStraight = path.isStraight(maxDistance);
 
         assertThat(isStraight).isEqualTo(expected);
     }
@@ -110,8 +110,8 @@ class PathFinderTest {
         final Position start = new Position(startRank, startFile);
         final Position target = new Position(targetRank, targetFile);
 
-        final PathFinder pathFinder = new PathFinder(start, target);
-        final boolean isDiagonal = pathFinder.isDiagonal();
+        final Path path = new Path(start, target);
+        final boolean isDiagonal = path.isDiagonal();
 
         assertThat(isDiagonal).isEqualTo(expected);
     }
@@ -130,8 +130,8 @@ class PathFinderTest {
         final Position start = new Position(startRank, startFile);
         final Position target = new Position(targetRank, targetFile);
 
-        final PathFinder pathFinder = new PathFinder(start, target);
-        final boolean isDiagonal = pathFinder.isDiagonal(maxDistance);
+        final Path path = new Path(start, target);
+        final boolean isDiagonal = path.isDiagonal(maxDistance);
 
         assertThat(isDiagonal).isEqualTo(expected);
     }
@@ -148,8 +148,8 @@ class PathFinderTest {
         final Position start = new Position(startRank, startFile);
         final Position target = new Position(targetRank, targetFile);
 
-        final PathFinder pathFinder = new PathFinder(start, target);
-        final boolean isDiagonal = pathFinder.isDown(maxDistance);
+        final Path path = new Path(start, target);
+        final boolean isDiagonal = path.isDown(maxDistance);
 
         assertThat(isDiagonal).isEqualTo(expected);
     }
@@ -166,8 +166,8 @@ class PathFinderTest {
         final Position start = new Position(startRank, startFile);
         final Position target = new Position(targetRank, targetFile);
 
-        final PathFinder pathFinder = new PathFinder(start, target);
-        final boolean isDiagonal = pathFinder.isUp(maxDistance);
+        final Path path = new Path(start, target);
+        final boolean isDiagonal = path.isUp(maxDistance);
 
         assertThat(isDiagonal).isEqualTo(expected);
     }

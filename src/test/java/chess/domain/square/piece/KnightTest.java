@@ -4,7 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import chess.domain.EmptySquaresMaker;
 import chess.domain.position.File;
-import chess.domain.position.PathFinder;
+import chess.domain.position.Path;
 import chess.domain.position.Position;
 import chess.domain.position.Rank;
 import chess.domain.square.Square;
@@ -33,10 +33,10 @@ public class KnightTest {
         final Map<Position, Square> board = EmptySquaresMaker.make();
         Piece piece = Knight.from(Color.WHITE);
         board.put(new Position(startRank, startFile), piece);
-        PathFinder pathFinder = new PathFinder(
+        Path path = new Path(
                 new Position(startRank, startFile), new Position(targetRank, targetFile));
 
-        final boolean canMove = piece.canArrive(pathFinder, board);
+        final boolean canMove = piece.canArrive(path, board);
 
         assertThat(canMove).isTrue();
     }
@@ -59,10 +59,10 @@ public class KnightTest {
         Piece attackedPiece = Knight.from(Color.BLACK);
         board.put(new Position(startRank, startFile), attackerPiece);
         board.put(new Position(targetRank, targetFile), attackedPiece);
-        PathFinder pathFinder = new PathFinder(
+        Path path = new Path(
                 new Position(startRank, startFile), new Position(targetRank, targetFile));
 
-        final boolean canMove = attackerPiece.canArrive(pathFinder, board);
+        final boolean canMove = attackerPiece.canArrive(path, board);
 
         assertThat(canMove).isTrue();
     }
@@ -73,9 +73,9 @@ public class KnightTest {
         final Map<Position, Square> board = EmptySquaresMaker.make();
         Piece piece = Knight.from(Color.WHITE);
         board.put(new Position(Rank.FIRST, File.A), piece);
-        PathFinder pathFinder = new PathFinder(new Position(Rank.FIRST, File.A), new Position(Rank.SECOND, File.A));
+        Path path = new Path(new Position(Rank.FIRST, File.A), new Position(Rank.SECOND, File.A));
 
-        final boolean canMove = piece.canArrive(pathFinder, board);
+        final boolean canMove = piece.canArrive(path, board);
 
         assertThat(canMove).isFalse();
     }
