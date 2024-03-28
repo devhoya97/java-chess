@@ -7,7 +7,6 @@ import chess.domain.square.Square;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 public class Pawn extends Piece {
     private static final int ATTACKABLE_FILE_DISTANCE = 1;
@@ -17,7 +16,7 @@ public class Pawn extends Piece {
     private static final int BLACK_START_RANK = 7;
     private static final int WHITE_START_RANK = 2;
     private static final int DOWN_DIRECTION = -1;
-    private static final double DEFAULT_SCORE = 1;
+    private static final double DEFAULT_SCORE = 1.0;
     private static final double DEDUCTED_SCORE = 0.5;
     private static final Map<Color, Pawn> PAWN_POOL = Map.of(
             Color.WHITE, new Pawn(Color.WHITE),
