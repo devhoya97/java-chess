@@ -23,14 +23,14 @@ public class Command {
 
     public Position getStartPosition() {
         if (startPosition == null) {
-            throw new IllegalArgumentException("startPosition이 비어있습니다.");
+            throw new IllegalStateException("startPosition이 비어있습니다.");
         }
         return startPosition;
     }
 
     public Position getTargetPosition() {
         if (targetPosition == null) {
-            throw new IllegalArgumentException("targetPosition이 비어있습니다.");
+            throw new IllegalStateException("targetPosition이 비어있습니다.");
         }
         return targetPosition;
     }
