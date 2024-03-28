@@ -4,21 +4,21 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-public class PathFinder {
+public class Path {
     private final Position start;
     private final Position target;
 
-    public PathFinder(Position start, Position target) {
+    public Path(Position start, Position target) {
         this.start = start;
         this.target = target;
     }
 
-    public Set<Position> find() {
+    public Set<Position> positions() {
         if (isStraight()) {
-            return findStraight();
+            return straightPositions();
         }
         if (isDiagonal()) {
-            return findDiagonal();
+            return diagonalPositions();
         }
         return Collections.emptySet();
     }
@@ -47,14 +47,14 @@ public class PathFinder {
         return rankDistance() == 0 && fileDistance() > 0;
     }
 
-    private Set<Position> findStraight() {
+    private Set<Position> straightPositions() {
         if (isStraightRank()) {
-            return findStraightRank();
+            return straightRankPositions();
         }
-        return findStraightFile();
+        return straightFilePositions();
     }
 
-    private Set<Position> findStraightRank() {
+    private Set<Position> straightRankPositions() {
         int maxRankValue = Math.max(start.rankValue(), target.rankValue()) - 1;
         int minRankValue = Math.min(start.rankValue(), target.rankValue()) + 1;
 
@@ -66,7 +66,7 @@ public class PathFinder {
         return path;
     }
 
-    private Set<Position> findStraightFile() {
+    private Set<Position> straightFilePositions() {
         int maxFileValue = Math.max(start.fileValue(), target.fileValue()) - 1;
         int minFileValue = Math.min(start.fileValue(), target.fileValue()) + 1;
 
@@ -86,18 +86,18 @@ public class PathFinder {
         return isDiagonal() && rankDistance() <= maxDistance;
     }
 
-    private Set<Position> findDiagonal() {
+    private Set<Position> diagonalPositions() {
         if (isUphill()) {
-            return findUphill();
+            return uphillPositions();
         }
-        return findDownhill();
+        return downhillPositions();
     }
 
     private boolean isUphill() {
         return (target.subtractFile(start)) * (target.subtractRank(start)) > 0;
     }
 
-    private Set<Position> findUphill() {
+    private Set<Position> uphillPositions() {
         int minRankValue = Math.min(start.rankValue(), target.rankValue()) + 1;
         int minFileValue = Math.min(start.fileValue(), target.fileValue()) + 1;
         int pathLength = fileDistance() - 1;
@@ -109,7 +109,7 @@ public class PathFinder {
         return uphill;
     }
 
-    private Set<Position> findDownhill() {
+    private Set<Position> downhillPositions() {
         int maxRankValue = Math.max(start.rankValue(), target.rankValue()) - 1;
         int minFileValue = Math.min(start.fileValue(), target.fileValue()) + 1;
         int pathLength = fileDistance() - 1;
@@ -145,7 +145,7 @@ public class PathFinder {
 
     @Override
     public String toString() {
-        return "PathFinder{" +
+        return "Path{" +
                 "start=" + start +
                 ", end=" + target +
                 '}';

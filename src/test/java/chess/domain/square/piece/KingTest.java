@@ -4,7 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import chess.domain.EmptySquaresMaker;
 import chess.domain.position.File;
-import chess.domain.position.PathFinder;
+import chess.domain.position.Path;
 import chess.domain.position.Position;
 import chess.domain.position.Rank;
 import chess.domain.square.Square;
@@ -26,10 +26,10 @@ class KingTest {
         final Map<Position, Square> board = EmptySquaresMaker.make();
         Piece piece = King.from(Color.WHITE);
         board.put(new Position(startRank, startFile), piece);
-        PathFinder pathFinder = new PathFinder(
+        Path path = new Path(
                 new Position(startRank, startFile), new Position(targetRank, targetFile));
 
-        final boolean canMove = piece.canArrive(pathFinder, board);
+        final boolean canMove = piece.canArrive(path, board);
 
         assertThat(canMove).isTrue();
     }
@@ -44,10 +44,10 @@ class KingTest {
         final Map<Position, Square> board = EmptySquaresMaker.make();
         Piece piece = King.from(Color.WHITE);
         board.put(new Position(startRank, startFile), piece);
-        PathFinder pathFinder = new PathFinder(
+        Path path = new Path(
                 new Position(startRank, startFile), new Position(targetRank, targetFile));
 
-        final boolean canMove = piece.canArrive(pathFinder, board);
+        final boolean canMove = piece.canArrive(path, board);
 
         assertThat(canMove).isFalse();
     }
@@ -64,10 +64,10 @@ class KingTest {
         Piece attackedPiece = King.from(Color.BLACK);
         board.put(new Position(startRank, startFile), attackerPiece);
         board.put(new Position(targetRank, targetFile), attackedPiece);
-        PathFinder pathFinder = new PathFinder(
+        Path path = new Path(
                 new Position(startRank, startFile), new Position(targetRank, targetFile));
 
-        final boolean canAttack = attackerPiece.canArrive(pathFinder, board);
+        final boolean canAttack = attackerPiece.canArrive(path, board);
 
         assertThat(canAttack).isTrue();
     }

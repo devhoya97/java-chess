@@ -1,6 +1,6 @@
 package chess.domain.square.piece.unified;
 
-import chess.domain.position.PathFinder;
+import chess.domain.position.Path;
 import chess.domain.square.piece.Color;
 import java.util.Map;
 
@@ -18,7 +18,7 @@ public class Bishop extends MoveAttackUnified {
     }
 
     @Override
-    protected boolean canMove(PathFinder pathFinder) {
-        return pathFinder.isDiagonal();
+    protected boolean canMove(Path path) {
+        return path.isDiagonal();
     }
 }

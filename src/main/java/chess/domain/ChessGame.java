@@ -1,7 +1,7 @@
 package chess.domain;
 
 import chess.domain.board.ChessBoard;
-import chess.domain.position.PathFinder;
+import chess.domain.position.Path;
 import chess.domain.position.Position;
 import chess.domain.square.Square;
 
@@ -16,14 +16,14 @@ public class ChessGame {
         this.chessBoard = chessBoard;
     }
 
-    public void move(PathFinder pathFinder) {
-        validateIsFriendly(pathFinder);
-        chessBoard.move(pathFinder);
+    public void move(Path path) {
+        validateIsFriendly(path);
+        chessBoard.move(path);
         currentTurn.change();
     }
 
-    private void validateIsFriendly(PathFinder pathFinder) {
-        Square startSquare = chessBoard.findSquare(pathFinder.startPosition());
+    private void validateIsFriendly(Path path) {
+        Square startSquare = chessBoard.findSquare(path.startPosition());
         if (!startSquare.isColor(currentTurn.value())) {
             throw new IllegalArgumentException("시작 위치에 아군 체스말이 존재해야 합니다.");
         }

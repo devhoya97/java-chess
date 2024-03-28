@@ -4,7 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import chess.domain.EmptySquaresMaker;
 import chess.domain.position.File;
-import chess.domain.position.PathFinder;
+import chess.domain.position.Path;
 import chess.domain.position.Position;
 import chess.domain.position.Rank;
 import chess.domain.square.Square;
@@ -26,7 +26,7 @@ public class ChessBoardTest {
         Map<Position, Square> expected = EmptySquaresMaker.make();
         expected.put(new Position(Rank.FIRST, File.B), Rook.from(Color.WHITE));
 
-        chessBoard.move(new PathFinder(new Position(Rank.FIRST, File.A), new Position(Rank.FIRST, File.B)));
+        chessBoard.move(new Path(new Position(Rank.FIRST, File.A), new Position(Rank.FIRST, File.B)));
 
         assertThat(chessBoard.getSquares()).isEqualTo(expected);
     }
@@ -41,7 +41,7 @@ public class ChessBoardTest {
         Map<Position, Square> expected = EmptySquaresMaker.make();
         expected.put(new Position(Rank.FIRST, File.B), Rook.from(Color.WHITE));
 
-        chessBoard.move(new PathFinder(new Position(Rank.FIRST, File.A), new Position(Rank.FIRST, File.B)));
+        chessBoard.move(new Path(new Position(Rank.FIRST, File.A), new Position(Rank.FIRST, File.B)));
 
         assertThat(chessBoard.getSquares()).isEqualTo(expected);
     }
