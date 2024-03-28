@@ -2,6 +2,7 @@ package chess.domain.square;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class Score {
     private final double value;
@@ -30,5 +31,18 @@ public class Score {
 
     public double getValue() {
         return value;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Score score = (Score) o;
+        return Double.compare(value, score.value) == 0;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(value);
     }
 }

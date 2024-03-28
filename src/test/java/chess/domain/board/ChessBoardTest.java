@@ -7,6 +7,7 @@ import chess.domain.position.File;
 import chess.domain.position.Path;
 import chess.domain.position.Position;
 import chess.domain.position.Rank;
+import chess.domain.square.Score;
 import chess.domain.square.Square;
 import chess.domain.square.piece.Color;
 import chess.domain.square.piece.Pawn;
@@ -61,8 +62,8 @@ public class ChessBoardTest {
         squares.put(new Position(Rank.SECOND, File.F), Pawn.from(Color.BLACK));
         ChessBoard chessBoard = new ChessBoard(squares);
 
-        double score = chessBoard.calculateScore(Color.BLACK);
+        Score score = chessBoard.calculateScore(Color.BLACK);
 
-        assertThat(score).isEqualTo(20.5);
+        assertThat(score).isEqualTo(Score.from(20.5));
     }
 }
