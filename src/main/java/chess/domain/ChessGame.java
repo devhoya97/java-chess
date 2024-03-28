@@ -8,7 +8,7 @@ import chess.domain.square.Square;
 import java.util.Map;
 
 public class ChessGame {
-    private final CurrentTurn currentTurn;
+    private CurrentTurn currentTurn;
     private final ChessBoard chessBoard;
 
     public ChessGame(CurrentTurn currentTurn, ChessBoard chessBoard) {
@@ -19,7 +19,7 @@ public class ChessGame {
     public void move(Path path) {
         validateIsFriendly(path);
         chessBoard.move(path);
-        currentTurn.change();
+        currentTurn = currentTurn.change();
     }
 
     private void validateIsFriendly(Path path) {
