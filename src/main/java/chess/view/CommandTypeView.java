@@ -7,7 +7,8 @@ import java.util.Objects;
 public enum CommandTypeView {
     START("start", CommandType.START),
     END("end", CommandType.END),
-    MOVE("move", CommandType.MOVE);
+    MOVE("move", CommandType.MOVE),
+    STATUS("status", CommandType.STATUS);
 
     private final String viewName;
     private final CommandType commandType;

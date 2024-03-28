@@ -3,6 +3,7 @@ package chess.domain.board;
 import chess.domain.position.Path;
 import chess.domain.position.Position;
 import chess.domain.square.Empty;
+import chess.domain.square.Score;
 import chess.domain.square.Square;
 import chess.domain.square.piece.Color;
 
@@ -33,11 +34,11 @@ public class ChessBoard {
         }
     }
 
-    public double calculateScore(Color color) {
-        return squares.keySet().stream()
+    public Score calculateScore(Color color) {
+        return Score.from(squares.keySet().stream()
                 .filter(position -> findSquare(position).isColor(color))
                 .mapToDouble(position -> findSquare(position).score(sameFileSquares(position)).getValue())
-                .sum();
+                .sum());
     }
 
     private Set<Square> sameFileSquares(Position position) {

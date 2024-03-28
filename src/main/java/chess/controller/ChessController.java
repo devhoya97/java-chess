@@ -6,6 +6,7 @@ import chess.command.CommandType;
 import chess.domain.CurrentTurn;
 import chess.domain.board.ChessBoardMaker;
 import chess.domain.position.Path;
+import chess.domain.square.Score;
 import chess.domain.square.piece.Color;
 import chess.util.ExceptionRetryHandler;
 import chess.view.InputView;
@@ -65,7 +66,9 @@ public class ChessController {
         }
         if (command.type() == CommandType.MOVE) {
             movePlayerPiece(command, chessGame);
+            return;
         }
+        executeStatusCommand(chessGame);
     }
 
     private void movePlayerPiece(Command command, ChessGame chessGame) {
@@ -73,5 +76,18 @@ public class ChessController {
         chessGame.move(path);
 
         outputView.printChessBoard(chessGame.getBoard());
+    }
+
+    private void executeStatusCommand(ChessGame chessGame) {
+        Score whiteScore = chessGame.calculateScore(Color.WHITE);
+        Score blackScore = chessGame.calculateScore(Color.BLACK);
+        Color winner = Color.NO_COLOR;
+        if (whiteScore.getValue() > blackScore.getValue()) {
+            winner = Color.WHITE;
+        }
+        if (whiteScore.getValue() < blackScore.getValue()) {
+            winner = Color.BLACK;
+        }
+        outputView.printStatus(whiteScore, blackScore, winner);
     }
 }

@@ -4,6 +4,7 @@ import chess.domain.position.File;
 import chess.domain.position.Position;
 import chess.domain.position.Rank;
 import chess.domain.square.Empty;
+import chess.domain.square.Score;
 import chess.domain.square.Square;
 import chess.domain.square.piece.unified.Bishop;
 import chess.domain.square.piece.Color;
@@ -58,6 +59,7 @@ public class OutputView {
         System.out.println("> 게임 시작 : start");
         System.out.println("> 게임 종료 : end");
         System.out.println("> 게임 이동 : move source위치 target위치 - 예. move b2 b3");
+        System.out.println("> 현재 점수 및 승패 : status");
     }
 
     public void printChessBoard(Map<Position, Square> squares) {
@@ -75,5 +77,18 @@ public class OutputView {
             Square square = squares.get(new Position(rank, file));
             System.out.print(squareViews.get(square));
         }
+    }
+
+    public void printStatus(Score whiteScore, Score blackScore, Color winner) {
+        System.out.println("흰팀 점수 : " + whiteScore.getValue());
+        System.out.println("검정팀 점수 : " + blackScore.getValue());
+        String winnerMessage = "동점입니다.";
+        if (winner == Color.WHITE) {
+            winnerMessage = "흰팀이 우세합니다.";
+        }
+        if (winner == Color.BLACK) {
+            winnerMessage = "검정팀이 우세합니다.";
+        }
+        System.out.println(winnerMessage);
     }
 }
