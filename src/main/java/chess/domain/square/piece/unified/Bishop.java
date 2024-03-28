@@ -4,8 +4,8 @@ import chess.domain.position.Path;
 import chess.domain.square.Square;
 import chess.domain.square.piece.Color;
 
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class Bishop extends MoveAttackUnified {
     private static final double SCORE = 3.0;
@@ -26,7 +26,7 @@ public class Bishop extends MoveAttackUnified {
         return path.isDiagonal();
     }
 
-    public double score(List<Square> sameFileSquares) {
+    public double score(Set<Square> sameFileSquares) {
         return SCORE;
     }
 }

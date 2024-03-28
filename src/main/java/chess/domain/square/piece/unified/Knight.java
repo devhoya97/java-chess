@@ -4,8 +4,8 @@ import chess.domain.position.Path;
 import chess.domain.square.Square;
 import chess.domain.square.piece.Color;
 
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class Knight extends MoveAttackUnified {
     private static final int MIN_MOVABLE_DISTANCE = 1;
@@ -29,7 +29,7 @@ public class Knight extends MoveAttackUnified {
                 (path.rankDistance() == MAX_MOVABLE_DISTANCE && path.fileDistance() == MIN_MOVABLE_DISTANCE);
     }
 
-    public double score(List<Square> sameFileSquares) {
+    public double score(Set<Square> sameFileSquares) {
         return SCORE;
     }
 }

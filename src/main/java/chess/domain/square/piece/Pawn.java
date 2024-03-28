@@ -5,8 +5,8 @@ import chess.domain.position.Position;
 import chess.domain.square.Empty;
 import chess.domain.square.Square;
 
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class Pawn extends Piece {
     private static final int ATTACKABLE_FILE_DISTANCE = 1;
@@ -21,7 +21,6 @@ public class Pawn extends Piece {
     private static final Map<Color, Pawn> PAWN_POOL = Map.of(
             Color.WHITE, new Pawn(Color.WHITE),
             Color.BLACK, new Pawn(Color.BLACK));
-    private static final int ONLY_ONE_PAWN_EXIST = 1;
 
     private Pawn(Color color) {
         super(color);
@@ -67,13 +66,13 @@ public class Pawn extends Piece {
                 (path.fileDistance() == ATTACKABLE_FILE_DISTANCE);
     }
 
-    public double score(List<Square> sameFileSquares) {
+    public double score(Set<Square> sameFileSquares) {
         long count = sameFileSquares.stream()
                 .filter(square -> square == this)
                 .count();
-        if (count != ONLY_ONE_PAWN_EXIST) {
-            return DEDUCTED_SCORE;
+        if (count == 0) {
+            return DEFAULT_SCORE;
         }
-        return DEFAULT_SCORE;
+        return DEDUCTED_SCORE;
     }
 }

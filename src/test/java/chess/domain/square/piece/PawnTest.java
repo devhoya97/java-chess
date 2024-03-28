@@ -9,8 +9,8 @@ import chess.domain.position.Position;
 import chess.domain.position.Rank;
 import chess.domain.square.Square;
 
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Stream;
 
 import chess.domain.square.piece.unified.Bishop;
@@ -257,7 +257,7 @@ class PawnTest {
     void scoreIsOneUnlessSameColorPawnExistInSameFile() {
         Pawn pawn = Pawn.from(Color.WHITE);
 
-        double score = pawn.score(List.of(Pawn.from(Color.WHITE), Pawn.from(Color.BLACK), Bishop.from(Color.WHITE)));
+        double score = pawn.score(Set.of(Pawn.from(Color.BLACK), Bishop.from(Color.WHITE)));
 
         assertThat(score).isEqualTo(1.0);
     }
@@ -267,7 +267,7 @@ class PawnTest {
     void scoreIsPointFiveIfSameColorPawnExistInSameFile() {
         Pawn pawn = Pawn.from(Color.WHITE);
 
-        double score = pawn.score(List.of(Pawn.from(Color.WHITE), Pawn.from(Color.WHITE), Bishop.from(Color.WHITE)));
+        double score = pawn.score(Set.of(Pawn.from(Color.WHITE), Bishop.from(Color.WHITE)));
 
         assertThat(score).isEqualTo(0.5);
     }

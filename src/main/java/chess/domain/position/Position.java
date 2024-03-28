@@ -1,6 +1,9 @@
 package chess.domain.position;
 
+import java.util.Arrays;
 import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class Position {
     private final Rank rank;
@@ -25,6 +28,13 @@ public class Position {
 
     public int subtractFile(Position position) {
         return file.subtract(position.file);
+    }
+
+    public Set<Position> sameFilePositions() {
+        return Arrays.stream(Rank.values())
+                .filter(rank -> rank != this.rank)
+                .map(rank -> new Position(rank, this.file))
+                .collect(Collectors.toSet());
     }
 
     @Override
