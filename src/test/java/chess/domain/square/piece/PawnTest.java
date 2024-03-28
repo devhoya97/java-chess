@@ -8,8 +8,12 @@ import chess.domain.position.Path;
 import chess.domain.position.Position;
 import chess.domain.position.Rank;
 import chess.domain.square.Square;
+
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
+
+import chess.domain.square.piece.unified.Bishop;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -246,5 +250,25 @@ class PawnTest {
                     new Position(Rank.SEVENTH, File.C)
             );
         }
+    }
+
+    @DisplayName("Pawn과 같은 File에 다른 Pawn이 없으면, 그 Pawn은 1점이다.")
+    @Test
+    void scoreIsOneUnlessSameColorPawnExistInSameFile() {
+        Pawn pawn = Pawn.from(Color.WHITE);
+
+        double score = pawn.score(List.of(Pawn.from(Color.WHITE), Pawn.from(Color.BLACK), Bishop.from(Color.WHITE)));
+
+        assertThat(score).isEqualTo(1.0);
+    }
+
+    @DisplayName("Pawn과 같은 File에 다른 Pawn이 있으면, 그 Pawn은 0.5점이다.")
+    @Test
+    void scoreIsPointFiveIfSameColorPawnExistInSameFile() {
+        Pawn pawn = Pawn.from(Color.WHITE);
+
+        double score = pawn.score(List.of(Pawn.from(Color.WHITE), Pawn.from(Color.WHITE), Bishop.from(Color.WHITE)));
+
+        assertThat(score).isEqualTo(0.5);
     }
 }

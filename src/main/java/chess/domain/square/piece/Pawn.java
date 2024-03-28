@@ -4,7 +4,10 @@ import chess.domain.position.Path;
 import chess.domain.position.Position;
 import chess.domain.square.Empty;
 import chess.domain.square.Square;
+
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class Pawn extends Piece {
     private static final int ATTACKABLE_FILE_DISTANCE = 1;
@@ -14,9 +17,12 @@ public class Pawn extends Piece {
     private static final int BLACK_START_RANK = 7;
     private static final int WHITE_START_RANK = 2;
     private static final int DOWN_DIRECTION = -1;
+    private static final double DEFAULT_SCORE = 1;
+    private static final double DEDUCTED_SCORE = 0.5;
     private static final Map<Color, Pawn> PAWN_POOL = Map.of(
             Color.WHITE, new Pawn(Color.WHITE),
             Color.BLACK, new Pawn(Color.BLACK));
+    private static final int ONLY_ONE_PAWN_EXIST = 1;
 
     private Pawn(Color color) {
         super(color);
@@ -60,5 +66,15 @@ public class Pawn extends Piece {
         }
         return (path.subtractRank() == attackableRankDiff) &&
                 (path.fileDistance() == ATTACKABLE_FILE_DISTANCE);
+    }
+
+    public double score(List<Square> sameFileSquares) {
+        long count = sameFileSquares.stream()
+                .filter(square -> square == this)
+                .count();
+        if (count != ONLY_ONE_PAWN_EXIST) {
+            return DEDUCTED_SCORE;
+        }
+        return DEFAULT_SCORE;
     }
 }

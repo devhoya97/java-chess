@@ -4,6 +4,7 @@ import chess.domain.position.Path;
 import chess.domain.position.Position;
 import chess.domain.square.Empty;
 import chess.domain.square.Square;
+import chess.domain.square.piece.Color;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -28,6 +29,10 @@ public class ChessBoard {
         if (!startSquare.canArrive(path, squares)) {
             throw new IllegalArgumentException("해당 위치로 움직일 수 없습니다.");
         }
+    }
+
+    public double calculateScore(Color color) {
+        return 0;
     }
 
     public Square findSquare(Position position) {

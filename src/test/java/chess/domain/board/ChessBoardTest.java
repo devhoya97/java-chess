@@ -9,9 +9,11 @@ import chess.domain.position.Position;
 import chess.domain.position.Rank;
 import chess.domain.square.Square;
 import chess.domain.square.piece.Color;
-import chess.domain.square.piece.unified.Queen;
-import chess.domain.square.piece.unified.Rook;
+import chess.domain.square.piece.Pawn;
+import chess.domain.square.piece.unified.*;
+
 import java.util.Map;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -44,5 +46,23 @@ public class ChessBoardTest {
         chessBoard.move(new Path(new Position(Rank.FIRST, File.A), new Position(Rank.FIRST, File.B)));
 
         assertThat(chessBoard.getSquares()).isEqualTo(expected);
+    }
+
+    @DisplayName("각 진영의 점수를 계산한다.")
+    @Test
+    void calculateColorScore() {
+        final Map<Position, Square> squares = EmptySquaresMaker.make();
+        squares.put(new Position(Rank.FIRST, File.A), Queen.from(Color.BLACK));
+        squares.put(new Position(Rank.FIRST, File.B), Rook.from(Color.BLACK));
+        squares.put(new Position(Rank.FIRST, File.C), Bishop.from(Color.BLACK));
+        squares.put(new Position(Rank.FIRST, File.D), Knight.from(Color.BLACK));
+        squares.put(new Position(Rank.FIRST, File.E), King.from(Color.BLACK));
+        squares.put(new Position(Rank.FIRST, File.F), Pawn.from(Color.BLACK));
+        squares.put(new Position(Rank.SECOND, File.F), Pawn.from(Color.BLACK));
+        ChessBoard chessBoard = new ChessBoard(squares);
+
+        double score = chessBoard.calculateScore(Color.BLACK);
+
+        assertThat(score).isEqualTo(20.5);
     }
 }
