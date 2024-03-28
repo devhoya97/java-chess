@@ -7,6 +7,7 @@ import chess.domain.position.File;
 import chess.domain.position.Path;
 import chess.domain.position.Position;
 import chess.domain.position.Rank;
+import chess.domain.square.Score;
 import chess.domain.square.Square;
 
 import java.util.Map;
@@ -257,9 +258,9 @@ class PawnTest {
     void scoreIsOneUnlessSameColorPawnExistInSameFile() {
         Pawn pawn = Pawn.from(Color.WHITE);
 
-        double score = pawn.score(Set.of(Pawn.from(Color.BLACK), Bishop.from(Color.WHITE)));
+        Score score = pawn.score(Set.of(Pawn.from(Color.BLACK), Bishop.from(Color.WHITE)));
 
-        assertThat(score).isEqualTo(1.0);
+        assertThat(score).isEqualTo(Score.from(1.0));
     }
 
     @DisplayName("Pawn과 같은 File에 다른 Pawn이 있으면, 그 Pawn은 0.5점이다.")
@@ -267,8 +268,8 @@ class PawnTest {
     void scoreIsPointFiveIfSameColorPawnExistInSameFile() {
         Pawn pawn = Pawn.from(Color.WHITE);
 
-        double score = pawn.score(Set.of(Pawn.from(Color.WHITE), Bishop.from(Color.WHITE)));
+        Score score = pawn.score(Set.of(Pawn.from(Color.WHITE), Bishop.from(Color.WHITE)));
 
-        assertThat(score).isEqualTo(0.5);
+        assertThat(score).isEqualTo(Score.from(0.5));
     }
 }

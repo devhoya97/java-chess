@@ -1,6 +1,7 @@
 package chess.domain.square.piece.unified;
 
 import chess.domain.position.Path;
+import chess.domain.square.Score;
 import chess.domain.square.Square;
 import chess.domain.square.piece.Color;
 
@@ -27,7 +28,7 @@ public class Rook extends MoveAttackUnified {
     }
 
     @Override
-    public double score(Set<Square> sameFileSquares) {
-        return SCORE;
+    public Score score(Set<Square> sameFileSquares) {
+        return Score.from(SCORE);
     }
 }

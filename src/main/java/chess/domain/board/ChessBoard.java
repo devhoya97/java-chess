@@ -36,7 +36,7 @@ public class ChessBoard {
     public double calculateScore(Color color) {
         return squares.keySet().stream()
                 .filter(position -> findSquare(position).isColor(color))
-                .mapToDouble(position -> findSquare(position).score(sameFileSquares(position)))
+                .mapToDouble(position -> findSquare(position).score(sameFileSquares(position)).getValue())
                 .sum();
     }
 

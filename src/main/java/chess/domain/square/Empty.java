@@ -28,7 +28,7 @@ public class Empty implements Square {
     }
 
     @Override
-    public double score(Set<Square> sameFileSquares) {
-        return 0;
+    public Score score(Set<Square> sameFileSquares) {
+        return Score.from(0);
     }
 }

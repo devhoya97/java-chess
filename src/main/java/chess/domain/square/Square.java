@@ -13,5 +13,5 @@ public interface Square {
 
     boolean isColor(Color color);
 
-    double score(Set<Square> sameFileSquares);
+    Score score(Set<Square> sameFileSquares);
 }

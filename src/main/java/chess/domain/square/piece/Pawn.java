@@ -3,6 +3,7 @@ package chess.domain.square.piece;
 import chess.domain.position.Path;
 import chess.domain.position.Position;
 import chess.domain.square.Empty;
+import chess.domain.square.Score;
 import chess.domain.square.Square;
 
 import java.util.Map;
@@ -67,13 +68,13 @@ public class Pawn extends Piece {
     }
 
     @Override
-    public double score(Set<Square> sameFileSquares) {
+    public Score score(Set<Square> sameFileSquares) {
         long count = sameFileSquares.stream()
                 .filter(square -> square == this)
                 .count();
         if (count == 0) {
-            return DEFAULT_SCORE;
+            return Score.from(DEFAULT_SCORE);
         }
-        return DEDUCTED_SCORE;
+        return Score.from(DEDUCTED_SCORE);
     }
 }
