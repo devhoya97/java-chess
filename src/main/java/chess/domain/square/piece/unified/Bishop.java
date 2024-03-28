@@ -26,6 +26,7 @@ public class Bishop extends MoveAttackUnified {
         return path.isDiagonal();
     }
 
+    @Override
     public double score(Set<Square> sameFileSquares) {
         return SCORE;
     }

@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.Set;
 
 public class Queen extends MoveAttackUnified {
-    private static final double SCORE = 3.0;
+    private static final double SCORE = 9.0;
     private static final Map<Color, Queen> QUEEN_POOL = Map.of(
             Color.WHITE, new Queen(Color.WHITE),
             Color.BLACK, new Queen(Color.BLACK));
@@ -26,6 +26,7 @@ public class Queen extends MoveAttackUnified {
         return path.isStraight() || path.isDiagonal();
     }
 
+    @Override
     public double score(Set<Square> sameFileSquares) {
         return SCORE;
     }

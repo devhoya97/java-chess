@@ -27,6 +27,7 @@ public class King extends MoveAttackUnified {
         return path.isStraight(MOVABLE_DISTANCE) || path.isDiagonal(MOVABLE_DISTANCE);
     }
 
+    @Override
     public double score(Set<Square> sameFileSquares) {
         return SCORE;
     }

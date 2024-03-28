@@ -66,6 +66,7 @@ public class Pawn extends Piece {
                 (path.fileDistance() == ATTACKABLE_FILE_DISTANCE);
     }
 
+    @Override
     public double score(Set<Square> sameFileSquares) {
         long count = sameFileSquares.stream()
                 .filter(square -> square == this)

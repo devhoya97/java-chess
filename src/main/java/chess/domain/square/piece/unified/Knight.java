@@ -29,6 +29,7 @@ public class Knight extends MoveAttackUnified {
                 (path.rankDistance() == MAX_MOVABLE_DISTANCE && path.fileDistance() == MIN_MOVABLE_DISTANCE);
     }
 
+    @Override
     public double score(Set<Square> sameFileSquares) {
         return SCORE;
     }

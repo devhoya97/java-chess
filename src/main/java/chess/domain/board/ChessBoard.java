@@ -9,6 +9,8 @@ import chess.domain.square.piece.Color;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class ChessBoard {
     private final Map<Position, Square> squares;
@@ -32,7 +34,17 @@ public class ChessBoard {
     }
 
     public double calculateScore(Color color) {
-        return 0;
+        return squares.keySet().stream()
+                .filter(position -> findSquare(position).isColor(color))
+                .mapToDouble(position -> findSquare(position).score(sameFileSquares(position)))
+                .sum();
+    }
+
+    private Set<Square> sameFileSquares(Position position) {
+        return position.sameFilePositions()
+                .stream()
+                .map(this::findSquare)
+                .collect(Collectors.toSet());
     }
 
     public Square findSquare(Position position) {

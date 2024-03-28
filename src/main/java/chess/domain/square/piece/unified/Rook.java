@@ -26,6 +26,7 @@ public class Rook extends MoveAttackUnified {
         return path.isStraight();
     }
 
+    @Override
     public double score(Set<Square> sameFileSquares) {
         return SCORE;
     }
