@@ -35,10 +35,12 @@ public class ChessBoard {
     }
 
     public Score calculateScore(Color color) {
-        return Score.from(squares.keySet().stream()
+        double sum = squares.keySet().stream()
                 .filter(position -> findSquare(position).isColor(color))
                 .mapToDouble(position -> findSquare(position).score(sameFileSquares(position)).getValue())
-                .sum());
+                .sum();
+
+        return Score.of(sum, color);
     }
 
     private Set<Square> sameFileSquares(Position position) {

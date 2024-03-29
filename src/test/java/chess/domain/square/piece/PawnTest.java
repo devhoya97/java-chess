@@ -260,7 +260,7 @@ class PawnTest {
 
         Score score = pawn.score(Set.of(Pawn.from(Color.BLACK), Bishop.from(Color.WHITE)));
 
-        assertThat(score).isEqualTo(Score.from(1.0));
+        assertThat(score).isEqualTo(Score.of(1.0, Color.WHITE));
     }
 
     @DisplayName("Pawn과 같은 File에 다른 Pawn이 있으면, 그 Pawn은 0.5점이다.")
@@ -270,6 +270,6 @@ class PawnTest {
 
         Score score = pawn.score(Set.of(Pawn.from(Color.WHITE), Bishop.from(Color.WHITE)));
 
-        assertThat(score).isEqualTo(Score.from(0.5));
+        assertThat(score).isEqualTo(Score.of(0.5, Color.WHITE));
     }
 }

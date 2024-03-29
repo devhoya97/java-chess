@@ -81,13 +81,8 @@ public class ChessController {
     private void executeStatusCommand(ChessGame chessGame) {
         Score whiteScore = chessGame.calculateScore(Color.WHITE);
         Score blackScore = chessGame.calculateScore(Color.BLACK);
-        Color winner = Color.NO_COLOR;
-        if (whiteScore.getValue() > blackScore.getValue()) {
-            winner = Color.WHITE;
-        }
-        if (whiteScore.getValue() < blackScore.getValue()) {
-            winner = Color.BLACK;
-        }
+        Color winner = whiteScore.findWinner(blackScore);
+
         outputView.printStatus(whiteScore, blackScore, winner);
     }
 }

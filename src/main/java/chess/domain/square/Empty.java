@@ -29,6 +29,6 @@ public class Empty implements Square {
 
     @Override
     public Score score(Set<Square> sameFileSquares) {
-        return Score.from(0);
+        return Score.of(0, Color.NO_COLOR);
     }
 }

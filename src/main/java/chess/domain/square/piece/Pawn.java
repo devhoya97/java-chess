@@ -73,8 +73,8 @@ public class Pawn extends Piece {
                 .filter(square -> square == this)
                 .count();
         if (count == 0) {
-            return Score.from(DEFAULT_SCORE);
+            return Score.of(DEFAULT_SCORE, getColor());
         }
-        return Score.from(DEDUCTED_SCORE);
+        return Score.of(DEDUCTED_SCORE, getColor());
     }
 }

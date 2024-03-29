@@ -64,6 +64,6 @@ public class ChessBoardTest {
 
         Score score = chessBoard.calculateScore(Color.BLACK);
 
-        assertThat(score).isEqualTo(Score.from(20.5));
+        assertThat(score).isEqualTo(Score.of(20.5, Color.BLACK));
     }
 }

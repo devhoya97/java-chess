@@ -30,6 +30,6 @@ public class King extends MoveAttackUnified {
 
     @Override
     public Score score(Set<Square> sameFileSquares) {
-        return Score.from(SCORE);
+        return Score.of(SCORE, getColor());
     }
 }
