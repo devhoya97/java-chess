@@ -45,7 +45,7 @@ public class Score {
     }
 
 
-    public Color findWinner(Score other) {
+    public Color findLeadingSide(Score other) {
         validateOpposite(other);
         if (value > other.value) {
             return color;

@@ -14,7 +14,7 @@ class ScoreTest {
         Score whiteScore = Score.of(1, Color.WHITE);
         Score blackScore = Score.of(2, Color.BLACK);
 
-        Color winner = whiteScore.findWinner(blackScore);
+        Color winner = whiteScore.findLeadingSide(blackScore);
 
         assertThat(winner).isEqualTo(Color.BLACK);
     }
@@ -25,7 +25,7 @@ class ScoreTest {
         Score whiteScore = Score.of(1, Color.WHITE);
         Score blackScore = Score.of(1, Color.BLACK);
 
-        Color winner = whiteScore.findWinner(blackScore);
+        Color winner = whiteScore.findLeadingSide(blackScore);
 
         assertThat(winner).isEqualTo(Color.NO_COLOR);
     }

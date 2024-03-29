@@ -79,16 +79,16 @@ public class OutputView {
         }
     }
 
-    public void printStatus(Score whiteScore, Score blackScore, Color winner) {
+    public void printStatus(Score whiteScore, Score blackScore, Color leadingSide) {
         System.out.println("흰팀 점수 : " + whiteScore.getValue());
         System.out.println("검정팀 점수 : " + blackScore.getValue());
-        String winnerMessage = "동점입니다.";
-        if (winner == Color.WHITE) {
-            winnerMessage = "흰팀이 우세합니다.";
+        String leadingSideMessage = "동점입니다.";
+        if (leadingSide == Color.WHITE) {
+            leadingSideMessage = "흰팀이 우세합니다.";
         }
-        if (winner == Color.BLACK) {
-            winnerMessage = "검정팀이 우세합니다.";
+        if (leadingSide == Color.BLACK) {
+            leadingSideMessage = "검정팀이 우세합니다.";
         }
-        System.out.println(winnerMessage);
+        System.out.println(leadingSideMessage);
     }
 }
