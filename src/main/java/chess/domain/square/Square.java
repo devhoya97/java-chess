@@ -14,4 +14,6 @@ public interface Square {
     boolean isColor(Color color);
 
     Score score(Set<Square> sameFileSquares);
+
+    boolean isKing();
 }

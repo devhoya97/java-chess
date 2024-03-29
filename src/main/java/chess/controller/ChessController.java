@@ -56,7 +56,10 @@ public class ChessController {
 
         while (command.type() != CommandType.END) {
             executeCommand(command, chessGame);
-            command = inputView.readCommand();
+            command = readCommandUnlessGameEnd(chessGame);
+        }
+        if (doesEnd(chessGame)) {
+            outputView.printEndMessage(chessGame.findWinner());
         }
     }
 
@@ -84,5 +87,16 @@ public class ChessController {
         Color leadingSide = whiteScore.findLeadingSide(blackScore);
 
         outputView.printStatus(whiteScore, blackScore, leadingSide);
+    }
+
+    private Command readCommandUnlessGameEnd(ChessGame chessGame) {
+        if (doesEnd(chessGame)) {
+            return Command.from(CommandType.END);
+        }
+        return inputView.readCommand();
+    }
+
+    private boolean doesEnd(ChessGame chessGame) {
+        return chessGame.findWinner() != Color.NO_COLOR;
     }
 }

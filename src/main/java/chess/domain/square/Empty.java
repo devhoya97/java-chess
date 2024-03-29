@@ -31,4 +31,9 @@ public class Empty implements Square {
     public Score score(Set<Square> sameFileSquares) {
         return Score.of(0, Color.NO_COLOR);
     }
+
+    @Override
+    public boolean isKing() {
+        return false;
+    }
 }

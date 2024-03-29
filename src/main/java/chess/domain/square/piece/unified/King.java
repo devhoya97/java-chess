@@ -32,4 +32,9 @@ public class King extends MoveAttackUnified {
     public Score score(Set<Square> sameFileSquares) {
         return Score.of(SCORE, getColor());
     }
+
+    @Override
+    public boolean isKing() {
+        return true;
+    }
 }

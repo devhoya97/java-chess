@@ -91,4 +91,12 @@ public class OutputView {
         }
         System.out.println(leadingSideMessage);
     }
+
+    public void printEndMessage(Color winner) {
+        String winnerView = "흰팀";
+        if (winner == Color.BLACK) {
+            winnerView = "검정팀";
+        }
+        System.out.println("축하합니다! " + winnerView + "이 승리했습니다.");
+    }
 }

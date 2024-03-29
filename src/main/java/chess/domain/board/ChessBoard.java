@@ -50,6 +50,25 @@ public class ChessBoard {
                 .collect(Collectors.toSet());
     }
 
+    public Color findWinner() {
+        if (isKingAlive(Color.WHITE) && isKingAlive(Color.BLACK)) {
+            return Color.NO_COLOR;
+        }
+        if (isKingAlive(Color.WHITE)) {
+            return Color.WHITE;
+        }
+        return Color.BLACK;
+    }
+
+    private boolean isKingAlive(Color color) {
+        long kingCount = squares.keySet().stream()
+                .map(squares::get)
+                .filter(square -> square.isColor(color) && square.isKing())
+                .count();
+
+        return kingCount != 0;
+    }
+
     public Square findSquare(Position position) {
         return squares.get(position);
     }

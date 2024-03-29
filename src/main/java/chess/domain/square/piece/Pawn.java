@@ -77,4 +77,9 @@ public class Pawn extends Piece {
         }
         return Score.of(DEDUCTED_SCORE, getColor());
     }
+
+    @Override
+    public boolean isKing() {
+        return false;
+    }
 }

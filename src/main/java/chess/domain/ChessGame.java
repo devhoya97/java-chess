@@ -35,6 +35,10 @@ public class ChessGame {
         return chessBoard.calculateScore(color);
     }
 
+    public Color findWinner() {
+        return chessBoard.findWinner();
+    }
+
     public Map<Position, Square> getBoard() {
         return chessBoard.getSquares();
     }

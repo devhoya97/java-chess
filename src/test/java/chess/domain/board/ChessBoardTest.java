@@ -17,11 +17,18 @@ import java.util.Map;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 public class ChessBoardTest {
 
     @DisplayName("target이 비어있는 경우 체스말을 움직인다.")
-    @Test
+    @ParameterizedTest
+    @CsvSource({
+            "FIRST, A, FOURTH, A, true",
+            "FIRST, A, FIRST, D, true",
+            "FIRST, A, FOURTH, B, false"
+    })
     void movePieceTest() {
         final Map<Position, Square> squares = EmptySquaresMaker.make();
         squares.put(new Position(Rank.FIRST, File.A), Rook.from(Color.WHITE));
@@ -65,5 +72,30 @@ public class ChessBoardTest {
         Score score = chessBoard.calculateScore(Color.BLACK);
 
         assertThat(score).isEqualTo(Score.of(20.5, Color.BLACK));
+    }
+
+    @DisplayName("양쪽 킹이 살아있으면 아직 승부가 나지 않는다.")
+    @Test
+    void noOneWinIfBothKingAlive() {
+        final Map<Position, Square> squares = EmptySquaresMaker.make();
+        squares.put(new Position(Rank.FIRST, File.A), King.from(Color.WHITE));
+        squares.put(new Position(Rank.FIRST, File.E), King.from(Color.BLACK));
+        ChessBoard chessBoard = new ChessBoard(squares);
+
+        Color winner = chessBoard.findWinner();
+
+        assertThat(winner).isEqualTo(Color.NO_COLOR);
+    }
+
+    @DisplayName("화이트킹이 죽으면 블랙진영의 승리이다.")
+    @Test
+    void blackWinIfWhiteDied() {
+        final Map<Position, Square> squares = EmptySquaresMaker.make();
+        squares.put(new Position(Rank.FIRST, File.E), King.from(Color.BLACK));
+        ChessBoard chessBoard = new ChessBoard(squares);
+
+        Color winner = chessBoard.findWinner();
+
+        assertThat(winner).isEqualTo(Color.BLACK);
     }
 }
