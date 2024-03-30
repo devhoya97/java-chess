@@ -54,7 +54,7 @@ public class ChessController {
     private void startGame() {
         ChessGame chessGame = makeChessGame();
         outputView.printChessBoard(chessGame.getBoard());
-        ExceptionRetryHandler.handle(() -> executeCommandsUntilEnd(chessGame));
+        ExceptionRetryHandler.handle(() -> PlayGameUntilEnd(chessGame));
     }
 
     private ChessGame makeChessGame() {
@@ -63,35 +63,35 @@ public class ChessController {
             ChessBoardMaker chessBoardMaker = new ChessBoardMaker();
             return new ChessGame(new CurrentTurn(Color.WHITE), chessBoardMaker.make());
         }
-        ChessBoardLoader chessBoardLoader = ChessBoardLoader.from(pieceInfoDao.findAll());
         CurrentTurnDao currentTurnDao = new CurrentTurnDao();
+        ChessBoardLoader chessBoardLoader = ChessBoardLoader.from(pieceInfoDao.findAll());
         return new ChessGame(currentTurnDao.find(), chessBoardLoader.load());
     }
 
-    private void executeCommandsUntilEnd(ChessGame chessGame) {
+    private void PlayGameUntilEnd(ChessGame chessGame) {
         Command command = inputView.readCommand();
         while (command.type() != CommandType.END) {
-            executeCommand(command, chessGame);
-            command = readCommandUnlessGameEnd(chessGame);
+            runMoveOrStatus(command, chessGame);
+            command = readCommandUnlessKingDied(chessGame);
         }
+        deleteSavedGame();
         if (doesEnd(chessGame)) {
             outputView.printEndMessage(chessGame.findWinner());
             return;
         }
-        saveGameOrNot(chessGame);
+        ExceptionRetryHandler.handle(() -> saveGameOrNot(chessGame));
     }
 
-    private void executeCommand(Command command, ChessGame chessGame) {
-        if (command.type() == CommandType.START) {
-            throw new IllegalArgumentException("이미 게임이 진행중이므로 start 외의 커맨드를 입력해 주세요.");
-        }
+    private void runMoveOrStatus(Command command, ChessGame chessGame) {
         if (command.type() == CommandType.MOVE) {
             movePlayerPiece(command, chessGame);
             return;
         }
         if (command.type() == CommandType.STATUS) {
-            executeStatusCommand(chessGame);
+            runStatusCommand(chessGame);
+            return;
         }
+        throw new IllegalArgumentException("게임 진행 중에는 move 또는 status 명령만 입력 가능합니다.");
     }
 
     private void movePlayerPiece(Command command, ChessGame chessGame) {
@@ -101,7 +101,7 @@ public class ChessController {
         outputView.printChessBoard(chessGame.getBoard());
     }
 
-    private void executeStatusCommand(ChessGame chessGame) {
+    private void runStatusCommand(ChessGame chessGame) {
         Score whiteScore = chessGame.calculateScore(Color.WHITE);
         Score blackScore = chessGame.calculateScore(Color.BLACK);
         Color leadingSide = whiteScore.findLeadingSide(blackScore);
@@ -109,11 +109,16 @@ public class ChessController {
         outputView.printStatus(whiteScore, blackScore, leadingSide);
     }
 
-    private Command readCommandUnlessGameEnd(ChessGame chessGame) {
+    private Command readCommandUnlessKingDied(ChessGame chessGame) {
         if (doesEnd(chessGame)) {
             return Command.from(CommandType.END);
         }
         return inputView.readCommand();
+    }
+
+    private void deleteSavedGame() {
+        new PieceInfoDao().deleteAll();
+        new CurrentTurnDao().deleteAll();
     }
 
     private boolean doesEnd(ChessGame chessGame) {
@@ -121,7 +126,7 @@ public class ChessController {
     }
 
     private void saveGameOrNot(ChessGame chessGame) {
-        Command command = inputView.readCommandSaveOrNot();
+        Command command = inputView.readCommandSaveOrEnd();
         if (command.type() == CommandType.SAVE) {
             saveGame(chessGame);
             return;
@@ -143,18 +148,10 @@ public class ChessController {
                         RankTranslator.translate(entry.getKey().rank()),
                         PieceTranslator.translate(entry.getValue())))
                 .collect(Collectors.toSet());
-        PieceInfoDao pieceInfoDao = new PieceInfoDao();
-        pieceInfoDao.deleteAll();
-        pieceInfoDao.saveAll(survivedPieceInfos);
+        new PieceInfoDao().saveAll(survivedPieceInfos);
     }
 
     private void saveCurrentTurn(ChessGame chessGame) {
-        CurrentTurnDao currentTurnDao = new CurrentTurnDao();
-        currentTurnDao.save(chessGame.getCurrentTurn());
-    }
-
-    private void deleteSavedGame() {
-        new PieceInfoDao().deleteAll();
-        new CurrentTurnDao().deleteAll();
+        new CurrentTurnDao().save(chessGame.getCurrentTurn());
     }
 }

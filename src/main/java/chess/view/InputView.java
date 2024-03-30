@@ -65,9 +65,12 @@ public class InputView {
         );
     }
 
-    public Command readCommandSaveOrNot() {
+    public Command readCommandSaveOrEnd() {
         System.out.println("게임을 저장하려면 save, 저장하지 않으려면 end를 입력하세요.");
         CommandType commandType = CommandTypeView.find(scanner.nextLine());
+        if (commandType != CommandType.SAVE && commandType != CommandType.END) {
+            throw new IllegalArgumentException("save 또는 end만 입력 가능합니다.");
+        }
         return Command.from(commandType);
     }
 }
