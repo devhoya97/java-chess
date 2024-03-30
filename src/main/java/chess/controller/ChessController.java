@@ -54,6 +54,7 @@ public class ChessController {
     private void startGame() {
         ChessGame chessGame = makeChessGame();
         outputView.printChessBoard(chessGame.getBoard());
+        outputView.printTurnMessage(chessGame.getCurrentTurn());
         ExceptionRetryHandler.handle(() -> PlayGameUntilEnd(chessGame));
     }
 

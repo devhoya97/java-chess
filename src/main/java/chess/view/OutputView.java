@@ -1,5 +1,6 @@
 package chess.view;
 
+import chess.domain.CurrentTurn;
 import chess.domain.position.File;
 import chess.domain.position.Position;
 import chess.domain.position.Rank;
@@ -77,6 +78,14 @@ public class OutputView {
             Square square = squares.get(new Position(rank, file));
             System.out.print(squareViews.get(square));
         }
+    }
+
+    public void printTurnMessage(CurrentTurn currentTurn) {
+        if (currentTurn.value() == Color.WHITE) {
+            System.out.println("흰팀의 턴입니다.");
+            return;
+        }
+        System.out.println("검정팀의 턴입니다.");
     }
 
     public void printStatus(Score whiteScore, Score blackScore, Color leadingSide) {
