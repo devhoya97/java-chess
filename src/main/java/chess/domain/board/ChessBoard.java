@@ -73,6 +73,12 @@ public class ChessBoard {
         return squares.get(position);
     }
 
+    public Map<Position, Square> getPieces() {
+        return squares.entrySet().stream()
+                .filter(entry -> entry.getValue().isPiece())
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+    }
+
     public Map<Position, Square> getSquares() {
         return Collections.unmodifiableMap(squares);
     }

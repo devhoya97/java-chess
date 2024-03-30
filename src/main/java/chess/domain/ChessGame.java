@@ -39,6 +39,14 @@ public class ChessGame {
         return chessBoard.findWinner();
     }
 
+    public Map<Position, Square> getSurvivedPieces() {
+        return chessBoard.getPieces();
+    }
+
+    public CurrentTurn getCurrentTurn() {
+        return currentTurn;
+    }
+
     public Map<Position, Square> getBoard() {
         return chessBoard.getSquares();
     }

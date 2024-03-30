@@ -8,7 +8,8 @@ public enum CommandTypeView {
     START("start", CommandType.START),
     END("end", CommandType.END),
     MOVE("move", CommandType.MOVE),
-    STATUS("status", CommandType.STATUS);
+    STATUS("status", CommandType.STATUS),
+    SAVE("save", CommandType.SAVE);
 
     private final String viewName;
     private final CommandType commandType;

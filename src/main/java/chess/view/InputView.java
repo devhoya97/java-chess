@@ -64,4 +64,10 @@ public class InputView {
                 FileView.find(startFileRank.substring(FILE_BEGIN_INDEX, RANK_BEGIN_INDEX))
         );
     }
+
+    public Command readCommandSaveOrNot() {
+        System.out.println("게임을 저장하려면 save, 저장하지 않으려면 end를 입력하세요.");
+        CommandType commandType = CommandTypeView.find(scanner.nextLine());
+        return Command.from(commandType);
+    }
 }

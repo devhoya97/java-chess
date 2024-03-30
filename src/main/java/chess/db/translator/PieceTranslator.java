@@ -1,5 +1,6 @@
 package chess.db.translator;
 
+import chess.domain.square.Square;
 import chess.domain.square.piece.Color;
 import chess.domain.square.piece.Pawn;
 import chess.domain.square.piece.Piece;
@@ -35,9 +36,9 @@ public enum PieceTranslator {
                 .orElseThrow(() -> new IllegalArgumentException("준비된 PieceType이 아닙니다."));
     }
 
-    public static String translate(Piece piece) {
+    public static String translate(Square square) {
         return Arrays.stream(PieceTranslator.values())
-                .filter(pieceTranslator -> Objects.equals(piece.getClass(), pieceTranslator.pieceClass))
+                .filter(pieceTranslator -> Objects.equals(square.getClass(), pieceTranslator.pieceClass))
                 .map(pieceTranslator -> pieceTranslator.dbView)
                 .findAny()
                 .orElseThrow(() -> new IllegalArgumentException("준비된 PieceType이 아닙니다."));

@@ -1,12 +1,14 @@
 package chess.domain.board;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 import chess.domain.EmptySquaresMaker;
 import chess.domain.position.File;
 import chess.domain.position.Path;
 import chess.domain.position.Position;
 import chess.domain.position.Rank;
+import chess.domain.square.Empty;
 import chess.domain.square.Score;
 import chess.domain.square.Square;
 import chess.domain.square.piece.Color;
@@ -97,5 +99,21 @@ public class ChessBoardTest {
         Color winner = chessBoard.findWinner();
 
         assertThat(winner).isEqualTo(Color.BLACK);
+    }
+
+    @DisplayName("보드에 남아있는 Piece들을 찾는다.")
+    @Test
+    void getPieces() {
+        final Map<Position, Square> squares = EmptySquaresMaker.make();
+        Position piecePosition = new Position(Rank.FIRST, File.E);
+        squares.put(piecePosition, King.from(Color.BLACK));
+        squares.put(new Position(Rank.FIRST, File.F), Empty.getInstance());
+        ChessBoard chessBoard = new ChessBoard(squares);
+
+        Map<Position, Square> pieces = chessBoard.getPieces();
+
+        assertAll(
+                () -> assertThat(pieces.size()).isEqualTo(1),
+                () -> assertThat(pieces.get(piecePosition)).isEqualTo(King.from(Color.BLACK)));
     }
 }

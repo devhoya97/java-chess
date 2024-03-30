@@ -1,8 +1,8 @@
 package chess.db;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.HashSet;
+import java.util.Set;
 
 public class PieceInfoDao {
     private static final String SERVER = "localhost:13306"; // MySQL 서버 주소
@@ -11,10 +11,19 @@ public class PieceInfoDao {
     private static final String USERNAME = "root"; //  MySQL 서버 아이디
     private static final String PASSWORD = "root"; // MySQL 서버 비밀번호
 
-    public Connection getConnection() {
-        // 드라이버 연결
+    public void saveAll(final Set<PieceInfo> pieceInfos) {
+        try (final var connection = getConnection()) {
+            pieceInfos.forEach(pieceInfo -> save(pieceInfo, connection));
+        } catch (final SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private Connection getConnection() {
         try {
-            return DriverManager.getConnection("jdbc:mysql://" + SERVER + "/" + DATABASE + OPTION, USERNAME, PASSWORD);
+            Connection connection = DriverManager.getConnection("jdbc:mysql://" + SERVER + "/" + DATABASE + OPTION, USERNAME, PASSWORD);
+            createTableIfNotExists(connection);
+            return connection;
         } catch (final SQLException e) {
             System.err.println("DB 연결 오류:" + e.getMessage());
             e.printStackTrace();
@@ -22,66 +31,73 @@ public class PieceInfoDao {
         }
     }
 
-    public void add(final PieceInfo pieceInfo) {
+    private void save(PieceInfo pieceInfo, Connection connection) {
         final var query = "INSERT INTO pieceInfo VALUES(?, ?, ?, ?)";
-        try (final var connection = getConnection();
-             final var preparedStatement = connection.prepareStatement(query)) {
+        try (final var preparedStatement = connection.prepareStatement(query)){
             preparedStatement.setString(1, pieceInfo.color());
             preparedStatement.setString(2, pieceInfo.file());
             preparedStatement.setString(3, pieceInfo.rank());
             preparedStatement.setString(4, pieceInfo.pieceType());
             preparedStatement.executeUpdate();
-        } catch (final SQLException e) {
+        } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public PieceInfo findByFileRank(final String file, String rank) {
-        final var query = "SELECT * FROM pieceInfo WHERE file = ? AND `rank` = ?";
-        try (final var connection = getConnection();
-             final var preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setString(1, file);
-            preparedStatement.setString(2, rank);
+    private void createTableIfNotExists(Connection connection) throws SQLException {
+        try (Statement statement = connection.createStatement()) {
+            String createTableQuery = "CREATE TABLE IF NOT EXISTS pieceInfo (" +
+                    "color VARCHAR(10) NOT NULL, " +
+                    "file VARCHAR(10) NOT NULL, " +
+                    "`rank` VARCHAR(10) NOT NULL, " +
+                    "pieceType VARCHAR(10) NOT NULL, " +
+                    "PRIMARY KEY (file, `rank`)" +
+                    ")";
+            statement.executeUpdate(createTableQuery);
+        }
+    }
 
+    public Set<PieceInfo> findAll() {
+        Set<PieceInfo> pieceInfos = new HashSet<>();
+        final var query = "SELECT * FROM pieceInfo";
+        try (final var connection = getConnection();
+            final var preparedStatement = connection.prepareStatement(query)) {
             final var resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()) {
-                return new PieceInfo(
+            while (resultSet.next()) {
+                pieceInfos.add(new PieceInfo(
                         resultSet.getString("color"),
                         resultSet.getString("file"),
                         resultSet.getString("rank"),
-                        resultSet.getString("pieceType")
-                );
+                        resultSet.getString("pieceType")));
             }
         } catch (final SQLException e) {
             throw new RuntimeException(e);
         }
-
-        return null;
+        return pieceInfos;
     }
 
-    public void update(final PieceInfo pieceInfo) {
-        final String query = "UPDATE pieceInfo SET color = ?, pieceType = ? WHERE file = ? AND `rank` = ?";
+    public void deleteAll() {
+        final String query = "DELETE FROM pieceInfo";
         try (Connection connection = getConnection();
-            var preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setString(1, pieceInfo.color());
-            preparedStatement.setString(2, pieceInfo.pieceType());
-            preparedStatement.setString(3, pieceInfo.file());
-            preparedStatement.setString(4, pieceInfo.rank());
+             var preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public void delete(final String file, final String rank) {
-        final String query = "DELETE FROM pieceInfo WHERE file = ? AND `rank` = ?";
+    public boolean isEmpty() {
+        final String query = "SELECT COUNT(*) FROM pieceInfo";
         try (Connection connection = getConnection();
-            var preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setString(1, file);
-            preparedStatement.setString(2, rank);
-            preparedStatement.executeUpdate();
+            var preparedStatement = connection.prepareStatement(query);
+            var resultSet = preparedStatement.executeQuery()) {
+            if (resultSet.next()) {
+                int count = resultSet.getInt(1);
+                return count == 0;
+            }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+        return true;
     }
 }
