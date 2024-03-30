@@ -3,10 +3,7 @@ package chess.db;
 import chess.db.translator.ColorTranslator;
 import chess.domain.CurrentTurn;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 public class CurrentTurnDao {
     private static final String SERVER = "localhost:13306"; // MySQL 서버 주소
@@ -16,13 +13,13 @@ public class CurrentTurnDao {
     private static final String PASSWORD = "root"; // MySQL 서버 비밀번호
 
     public void save(final CurrentTurn currentTurn) {
-        final var query = "INSERT INTO currentTurn VALUES(?)";
-        try (final var connection = getConnection();
-             final var preparedStatement = connection.prepareStatement(query)) {
+        String query = "INSERT INTO currentTurn VALUES(?)";
+        try (Connection connection = getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             deleteAll(connection);
             preparedStatement.setString(1, ColorTranslator.translate(currentTurn.value()));
             preparedStatement.executeUpdate();
-        } catch (final SQLException e) {
+        } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
@@ -32,7 +29,7 @@ public class CurrentTurnDao {
             Connection connection = DriverManager.getConnection("jdbc:mysql://" + SERVER + "/" + DATABASE + OPTION, USERNAME, PASSWORD);
             createTableIfNotExists(connection);
             return connection;
-        } catch (final SQLException e) {
+        } catch (SQLException e) {
             System.err.println("DB 연결 오류:" + e.getMessage());
             e.printStackTrace();
             return null;
@@ -46,8 +43,8 @@ public class CurrentTurnDao {
     }
 
     private void deleteAll(Connection connection) {
-        final String query = "DELETE FROM currentTurn";
-        try (var preparedStatement = connection.prepareStatement(query)) {
+        String query = "DELETE FROM currentTurn";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -55,9 +52,9 @@ public class CurrentTurnDao {
     }
 
     public void deleteAll() {
-        final String query = "DELETE FROM currentTurn";
+        String query = "DELETE FROM currentTurn";
         try (Connection connection = getConnection();
-             var preparedStatement = connection.prepareStatement(query)) {
+            PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -65,16 +62,16 @@ public class CurrentTurnDao {
     }
 
     public CurrentTurn find() {
-        final var query = "SELECT * FROM currentTurn";
-        try (final var connection = getConnection();
-            final var preparedStatement = connection.prepareStatement(query)) {
-            final var resultSet = preparedStatement.executeQuery();
+        String  query = "SELECT * FROM currentTurn";
+        try (Connection connection = getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                 return new CurrentTurn(
                         ColorTranslator.translate(resultSet.getString("color"))
                 );
             }
-        } catch (final SQLException e) {
+        } catch (SQLException e) {
             throw new RuntimeException(e);
         }
         return null;

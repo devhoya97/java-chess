@@ -11,10 +11,10 @@ public class PieceInfoDao {
     private static final String USERNAME = "root"; //  MySQL 서버 아이디
     private static final String PASSWORD = "root"; // MySQL 서버 비밀번호
 
-    public void saveAll(final Set<PieceInfo> pieceInfos) {
-        try (final var connection = getConnection()) {
+    public void saveAll(Set<PieceInfo> pieceInfos) {
+        try (Connection connection = getConnection()) {
             pieceInfos.forEach(pieceInfo -> save(pieceInfo, connection));
-        } catch (final SQLException e) {
+        } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
@@ -24,7 +24,7 @@ public class PieceInfoDao {
             Connection connection = DriverManager.getConnection("jdbc:mysql://" + SERVER + "/" + DATABASE + OPTION, USERNAME, PASSWORD);
             createTableIfNotExists(connection);
             return connection;
-        } catch (final SQLException e) {
+        } catch (SQLException e) {
             System.err.println("DB 연결 오류:" + e.getMessage());
             e.printStackTrace();
             return null;
@@ -32,8 +32,8 @@ public class PieceInfoDao {
     }
 
     private void save(PieceInfo pieceInfo, Connection connection) {
-        final var query = "INSERT INTO pieceInfo VALUES(?, ?, ?, ?)";
-        try (final var preparedStatement = connection.prepareStatement(query)){
+        String query = "INSERT INTO pieceInfo VALUES(?, ?, ?, ?)";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)){
             preparedStatement.setString(1, pieceInfo.color());
             preparedStatement.setString(2, pieceInfo.file());
             preparedStatement.setString(3, pieceInfo.rank());
@@ -59,10 +59,10 @@ public class PieceInfoDao {
 
     public Set<PieceInfo> findAll() {
         Set<PieceInfo> pieceInfos = new HashSet<>();
-        final var query = "SELECT * FROM pieceInfo";
-        try (final var connection = getConnection();
-            final var preparedStatement = connection.prepareStatement(query)) {
-            final var resultSet = preparedStatement.executeQuery();
+        String query = "SELECT * FROM pieceInfo";
+        try (Connection connection = getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 pieceInfos.add(new PieceInfo(
                         resultSet.getString("color"),
@@ -77,9 +77,9 @@ public class PieceInfoDao {
     }
 
     public void deleteAll() {
-        final String query = "DELETE FROM pieceInfo";
+        String query = "DELETE FROM pieceInfo";
         try (Connection connection = getConnection();
-             var preparedStatement = connection.prepareStatement(query)) {
+            PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -87,10 +87,10 @@ public class PieceInfoDao {
     }
 
     public boolean isEmpty() {
-        final String query = "SELECT COUNT(*) FROM pieceInfo";
+        String query = "SELECT COUNT(*) FROM pieceInfo";
         try (Connection connection = getConnection();
-            var preparedStatement = connection.prepareStatement(query);
-            var resultSet = preparedStatement.executeQuery()) {
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            ResultSet resultSet = preparedStatement.executeQuery()) {
             if (resultSet.next()) {
                 int count = resultSet.getInt(1);
                 return count == 0;
