@@ -1,6 +1,7 @@
 package chess.db;
 
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.sql.Connection;
@@ -23,7 +24,8 @@ class PieceInfoDaoTest {
     void tearDown() {
         pieceInfoDao.delete(TEST_FILE, TEST_RANK);
     }
-    
+
+    @DisplayName("DB와 연결한다.")
     @Test
     void connection() throws SQLException {
         try (Connection connection = pieceInfoDao.getConnection()) {
@@ -31,15 +33,16 @@ class PieceInfoDaoTest {
         }
     }
 
+    @DisplayName("기물 정보를 DB에 저장한다.")
     @Test
     void addPieceInfo() {
         PieceInfo pieceInfo = new PieceInfo(TEST_COLOR, TEST_FILE, TEST_RANK, TEST_PIECE_TYPE);
         pieceInfoDao.add(pieceInfo);
 
         assertThat(pieceInfoDao.findByFileRank(TEST_FILE, TEST_RANK)).isEqualTo(pieceInfo);
-        pieceInfoDao.delete(TEST_FILE, TEST_RANK);
     }
 
+    @DisplayName("file과 rank 값을 key로 DB에서 기물 정보를 찾는다.")
     @Test
     void findByFileRank() {
         PieceInfo pieceInfo = new PieceInfo(TEST_COLOR, TEST_FILE, TEST_RANK, TEST_PIECE_TYPE);
@@ -47,9 +50,9 @@ class PieceInfoDaoTest {
         PieceInfo actual = pieceInfoDao.findByFileRank(TEST_FILE, TEST_RANK);
 
         assertThat(actual).isEqualTo(pieceInfo);
-        pieceInfoDao.delete(TEST_FILE, TEST_RANK);
     }
 
+    @DisplayName("DB에 저장된 기물 정보를 변경한다.")
     @Test
     void update() {
         PieceInfo initialPieceInfo = new PieceInfo(TEST_COLOR, TEST_FILE, TEST_RANK, TEST_PIECE_TYPE);
@@ -59,9 +62,9 @@ class PieceInfoDaoTest {
         PieceInfo actual = pieceInfoDao.findByFileRank(TEST_FILE, TEST_RANK);
 
         assertThat(actual).isEqualTo(updatedPieceInfo);
-        pieceInfoDao.delete(TEST_FILE, TEST_RANK);
     }
 
+    @DisplayName("DB에 저장된 기물 정보를 삭제한다.")
     @Test
     void delete() {
         PieceInfo pieceInfo = new PieceInfo(TEST_COLOR, TEST_FILE, TEST_RANK, TEST_PIECE_TYPE);
