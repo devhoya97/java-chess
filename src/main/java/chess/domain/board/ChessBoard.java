@@ -6,6 +6,8 @@ import chess.domain.square.Empty;
 import chess.domain.square.Score;
 import chess.domain.square.Square;
 import chess.domain.square.piece.Color;
+import chess.domain.square.piece.Piece;
+import chess.domain.square.piece.unified.King;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -63,7 +65,7 @@ public class ChessBoard {
     private boolean isKingAlive(Color color) {
         long kingCount = squares.keySet().stream()
                 .map(squares::get)
-                .filter(square -> square.isColor(color) && square.isKing())
+                .filter(square -> square.isColor(color) && square instanceof King)
                 .count();
 
         return kingCount != 0;
@@ -75,7 +77,7 @@ public class ChessBoard {
 
     public Map<Position, Square> getPieces() {
         return squares.entrySet().stream()
-                .filter(entry -> entry.getValue().isPiece())
+                .filter(entry -> entry.getValue() instanceof Piece)
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 

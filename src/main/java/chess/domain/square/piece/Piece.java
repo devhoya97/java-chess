@@ -28,11 +28,6 @@ public abstract class Piece implements Square {
     }
 
     @Override
-    public final boolean isPiece() {
-        return true;
-    }
-
-    @Override
     public String toString() {
         return "Piece{" +
                 "color=" + color +

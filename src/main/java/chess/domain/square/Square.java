@@ -15,9 +15,5 @@ public interface Square {
 
     Score score(Set<Square> sameFileSquares);
 
-    boolean isKing();
-
-    boolean isPiece();
-
     Color getColor();
 }

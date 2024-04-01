@@ -34,9 +34,4 @@ public class Knight extends MoveAttackUnified {
     public Score score(Set<Square> sameFileSquares) {
         return Score.of(SCORE, getColor());
     }
-
-    @Override
-    public boolean isKing() {
-        return false;
-    }
 }

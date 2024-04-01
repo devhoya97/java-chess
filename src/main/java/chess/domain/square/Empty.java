@@ -33,16 +33,6 @@ public class Empty implements Square {
     }
 
     @Override
-    public boolean isKing() {
-        return false;
-    }
-
-    @Override
-    public boolean isPiece() {
-        return false;
-    }
-
-    @Override
     public Color getColor() {
         return Color.NO_COLOR;
     }

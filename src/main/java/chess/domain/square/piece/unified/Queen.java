@@ -31,9 +31,4 @@ public class Queen extends MoveAttackUnified {
     public Score score(Set<Square> sameFileSquares) {
         return Score.of(SCORE, getColor());
     }
-
-    @Override
-    public boolean isKing() {
-        return false;
-    }
 }
