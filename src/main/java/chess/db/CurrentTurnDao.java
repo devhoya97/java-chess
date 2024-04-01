@@ -14,8 +14,8 @@ public class CurrentTurnDao {
 
     public void save(final CurrentTurn currentTurn) {
         String query = "INSERT INTO currentTurn VALUES(?)";
-        try (final Connection connection = dbConnector.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+        Connection connection = dbConnector.getConnection();
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             createTableIfNotExists(connection);
             deleteAll(connection);
             preparedStatement.setString(1, ColorTranslator.translate(currentTurn.value()));
@@ -42,8 +42,8 @@ public class CurrentTurnDao {
 
     public void deleteAll() {
         String query = "DELETE FROM currentTurn";
-        try (Connection connection = dbConnector.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+        Connection connection = dbConnector.getConnection();
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -52,8 +52,8 @@ public class CurrentTurnDao {
 
     public CurrentTurn find() {
         String  query = "SELECT * FROM currentTurn";
-        try (Connection connection = dbConnector.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+        Connection connection = dbConnector.getConnection();
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                 return new CurrentTurn(

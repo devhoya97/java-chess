@@ -12,11 +12,8 @@ public class PieceInfoDao {
     }
 
     public void saveAll(Set<PieceInfo> pieceInfos) {
-        try (Connection connection = dbConnector.getConnection()) {
-            pieceInfos.forEach(pieceInfo -> save(pieceInfo, connection));
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        Connection connection = dbConnector.getConnection();
+        pieceInfos.forEach(pieceInfo -> save(pieceInfo, connection));
     }
 
     private void save(PieceInfo pieceInfo, Connection connection) {
@@ -49,8 +46,8 @@ public class PieceInfoDao {
     public Set<PieceInfo> findAll() {
         Set<PieceInfo> pieceInfos = new HashSet<>();
         String query = "SELECT * FROM pieceInfo";
-        try (Connection connection = dbConnector.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+        Connection connection = dbConnector.getConnection();
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 pieceInfos.add(new PieceInfo(
@@ -67,8 +64,8 @@ public class PieceInfoDao {
 
     public void deleteAll() {
         String query = "DELETE FROM pieceInfo";
-        try (Connection connection = dbConnector.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+        Connection connection = dbConnector.getConnection();
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -77,8 +74,8 @@ public class PieceInfoDao {
 
     public boolean isEmpty() {
         String query = "SELECT COUNT(*) FROM pieceInfo";
-        try (Connection connection = dbConnector.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(query);
+        Connection connection = dbConnector.getConnection();
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query);
             ResultSet resultSet = preparedStatement.executeQuery()) {
             if (resultSet.next()) {
                 int count = resultSet.getInt(1);
