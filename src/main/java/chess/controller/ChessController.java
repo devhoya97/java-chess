@@ -1,6 +1,7 @@
 package chess.controller;
 
 import chess.db.CurrentTurnDao;
+import chess.db.DBConnector;
 import chess.db.PieceInfoDao;
 import chess.domain.ChessGame;
 import chess.command.Command;
@@ -39,7 +40,8 @@ public class ChessController {
     }
 
     private void startGame() {
-        ChessService chessService = new ChessService(new PieceInfoDao(), new CurrentTurnDao());
+        DBConnector dbConnector = new DBConnector();
+        ChessService chessService = new ChessService(new PieceInfoDao(dbConnector), new CurrentTurnDao(dbConnector));
         ChessGame chessGame = chessService.loadGame();
         outputView.printChessBoard(chessGame.getBoard());
         outputView.printTurnMessage(chessGame.getCurrentTurn());

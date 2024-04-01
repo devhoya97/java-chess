@@ -5,35 +5,24 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class PieceInfoDao {
-    private static final String SERVER = "localhost:13306"; // MySQL 서버 주소
-    private static final String DATABASE = "chess"; // MySQL DATABASE 이름
-    private static final String OPTION = "?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC";
-    private static final String USERNAME = "root"; //  MySQL 서버 아이디
-    private static final String PASSWORD = "root"; // MySQL 서버 비밀번호
+    private final DBConnector dbConnector;
+
+    public PieceInfoDao(DBConnector dbConnector) {
+        this.dbConnector = dbConnector;
+    }
 
     public void saveAll(Set<PieceInfo> pieceInfos) {
-        try (Connection connection = getConnection()) {
+        try (Connection connection = dbConnector.getConnection()) {
             pieceInfos.forEach(pieceInfo -> save(pieceInfo, connection));
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
-    private Connection getConnection() {
-        try {
-            Connection connection = DriverManager.getConnection("jdbc:mysql://" + SERVER + "/" + DATABASE + OPTION, USERNAME, PASSWORD);
-            createTableIfNotExists(connection);
-            return connection;
-        } catch (SQLException e) {
-            System.err.println("DB 연결 오류:" + e.getMessage());
-            e.printStackTrace();
-            return null;
-        }
-    }
-
     private void save(PieceInfo pieceInfo, Connection connection) {
         String query = "INSERT INTO pieceInfo VALUES(?, ?, ?, ?)";
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)){
+            createTableIfNotExists(connection);
             preparedStatement.setString(1, pieceInfo.color());
             preparedStatement.setString(2, pieceInfo.file());
             preparedStatement.setString(3, pieceInfo.rank());
@@ -60,7 +49,7 @@ public class PieceInfoDao {
     public Set<PieceInfo> findAll() {
         Set<PieceInfo> pieceInfos = new HashSet<>();
         String query = "SELECT * FROM pieceInfo";
-        try (Connection connection = getConnection();
+        try (Connection connection = dbConnector.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
@@ -78,7 +67,7 @@ public class PieceInfoDao {
 
     public void deleteAll() {
         String query = "DELETE FROM pieceInfo";
-        try (Connection connection = getConnection();
+        try (Connection connection = dbConnector.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
@@ -88,7 +77,7 @@ public class PieceInfoDao {
 
     public boolean isEmpty() {
         String query = "SELECT COUNT(*) FROM pieceInfo";
-        try (Connection connection = getConnection();
+        try (Connection connection = dbConnector.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             ResultSet resultSet = preparedStatement.executeQuery()) {
             if (resultSet.next()) {

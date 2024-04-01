@@ -15,7 +15,7 @@ class PieceInfoDaoTest {
     private static final String TEST_RANK = "1";
     private static final String TEST_PIECE_TYPE = "bishop";
 
-    private final PieceInfoDao pieceInfoDao = new PieceInfoDao();
+    private final PieceInfoDao pieceInfoDao = new PieceInfoDao(new DBConnector());
     
     @AfterEach
     void tearDown() {
