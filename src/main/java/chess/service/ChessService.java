@@ -1,9 +1,6 @@
 package chess.service;
 
-import chess.db.ChessBoardLoader;
-import chess.db.CurrentTurnDao;
-import chess.db.PieceInfo;
-import chess.db.PieceInfoDao;
+import chess.db.*;
 import chess.db.translator.ColorTranslator;
 import chess.db.translator.FileTranslator;
 import chess.db.translator.PieceTranslator;
@@ -26,6 +23,11 @@ public class ChessService {
     public ChessService(PieceInfoDao pieceInfoDao, CurrentTurnDao currentTurnDao) {
         this.pieceInfoDao = pieceInfoDao;
         this.currentTurnDao = currentTurnDao;
+    }
+
+    public static ChessService create() {
+        DBConnector dbConnector = new DBConnector();
+        return new ChessService(new PieceInfoDao(dbConnector), new CurrentTurnDao(dbConnector));
     }
 
     public ChessGame loadGame() {
