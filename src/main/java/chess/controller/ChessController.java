@@ -1,30 +1,17 @@
 package chess.controller;
 
-import chess.db.ChessBoardLoader;
 import chess.db.CurrentTurnDao;
-import chess.db.PieceInfo;
 import chess.db.PieceInfoDao;
-import chess.db.translator.ColorTranslator;
-import chess.db.translator.FileTranslator;
-import chess.db.translator.PieceTranslator;
-import chess.db.translator.RankTranslator;
 import chess.domain.ChessGame;
 import chess.command.Command;
 import chess.command.CommandType;
-import chess.domain.CurrentTurn;
-import chess.domain.board.ChessBoardMaker;
 import chess.domain.position.Path;
-import chess.domain.position.Position;
 import chess.domain.square.Score;
-import chess.domain.square.Square;
 import chess.domain.square.piece.Color;
+import chess.service.ChessService;
 import chess.util.ExceptionRetryHandler;
 import chess.view.InputView;
 import chess.view.OutputView;
-
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 public class ChessController {
     private final InputView inputView;
@@ -52,35 +39,25 @@ public class ChessController {
     }
 
     private void startGame() {
-        ChessGame chessGame = makeChessGame();
+        ChessService chessService = new ChessService(new PieceInfoDao(), new CurrentTurnDao());
+        ChessGame chessGame = chessService.loadGame();
         outputView.printChessBoard(chessGame.getBoard());
         outputView.printTurnMessage(chessGame.getCurrentTurn());
-        ExceptionRetryHandler.handle(() -> PlayGameUntilEnd(chessGame));
+        ExceptionRetryHandler.handle(() -> PlayGameUntilEnd(chessGame, chessService));
     }
 
-    private ChessGame makeChessGame() {
-        PieceInfoDao pieceInfoDao = new PieceInfoDao();
-        if (pieceInfoDao.isEmpty()) {
-            ChessBoardMaker chessBoardMaker = new ChessBoardMaker();
-            return new ChessGame(new CurrentTurn(Color.WHITE), chessBoardMaker.make());
-        }
-        CurrentTurnDao currentTurnDao = new CurrentTurnDao();
-        ChessBoardLoader chessBoardLoader = ChessBoardLoader.from(pieceInfoDao.findAll());
-        return new ChessGame(currentTurnDao.find(), chessBoardLoader.load());
-    }
-
-    private void PlayGameUntilEnd(ChessGame chessGame) {
+    private void PlayGameUntilEnd(ChessGame chessGame, ChessService chessService) {
         Command command = inputView.readCommand();
         while (command.type() != CommandType.END) {
             runMoveOrStatus(command, chessGame);
             command = readCommandUnlessKingDied(chessGame);
         }
-        deleteSavedGame();
+        chessService.deleteSavedGame();
         if (doesEnd(chessGame)) {
             outputView.printEndMessage(chessGame.findWinner());
             return;
         }
-        ExceptionRetryHandler.handle(() -> saveGameOrNot(chessGame));
+        ExceptionRetryHandler.handle(() -> saveGameOrNot(chessGame, chessService));
     }
 
     private void runMoveOrStatus(Command command, ChessGame chessGame) {
@@ -117,42 +94,16 @@ public class ChessController {
         return inputView.readCommand();
     }
 
-    private void deleteSavedGame() {
-        new PieceInfoDao().deleteAll();
-        new CurrentTurnDao().deleteAll();
-    }
-
     private boolean doesEnd(ChessGame chessGame) {
         return chessGame.findWinner() != Color.NO_COLOR;
     }
 
-    private void saveGameOrNot(ChessGame chessGame) {
+    private void saveGameOrNot(ChessGame chessGame, ChessService chessService) {
         Command command = inputView.readCommandSaveOrEnd();
         if (command.type() == CommandType.SAVE) {
-            saveGame(chessGame);
+            chessService.saveGame(chessGame);
             return;
         }
-        deleteSavedGame();
-    }
-
-    private void saveGame(ChessGame chessGame) {
-        saveSurvivedPieces(chessGame);
-        saveCurrentTurn(chessGame);
-    }
-
-    private void saveSurvivedPieces(ChessGame chessGame) {
-        Map<Position, Square> survivedPieces = chessGame.getSurvivedPieces();
-        Set<PieceInfo> survivedPieceInfos = survivedPieces.entrySet().stream()
-                .map(entry -> new PieceInfo(
-                        ColorTranslator.translate(entry.getValue().getColor()),
-                        FileTranslator.translate(entry.getKey().file()),
-                        RankTranslator.translate(entry.getKey().rank()),
-                        PieceTranslator.translate(entry.getValue())))
-                .collect(Collectors.toSet());
-        new PieceInfoDao().saveAll(survivedPieceInfos);
-    }
-
-    private void saveCurrentTurn(ChessGame chessGame) {
-        new CurrentTurnDao().save(chessGame.getCurrentTurn());
+        chessService.deleteSavedGame();
     }
 }
