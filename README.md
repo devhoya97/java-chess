@@ -1,4 +1,14 @@
 # 체스 게임
+### 애플리케이션 실행을 위해 아래 설정이 필요합니다!
+
+1. docekr-compose.yml 파일이 있는 경로에서, docker 명령어로 Server를 실행<br> 
+`docker-compose -p chess up -d`
+
+2. 권한 설정<br>
+`grant all privileges on *.* to 'username'@'localhost';`<br>
+`flush privileges;`<br>
+`USE chess;`
+***
 
 ## 기능 목록
 
