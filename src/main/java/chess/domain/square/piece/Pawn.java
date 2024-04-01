@@ -69,10 +69,10 @@ public class Pawn extends Piece {
 
     @Override
     public Score score(Set<Square> sameFileSquares) {
-        long count = sameFileSquares.stream()
+        long otherPawnCountOnSameFile = sameFileSquares.stream()
                 .filter(square -> square == this)
                 .count();
-        if (count == 0) {
+        if (otherPawnCountOnSameFile == 0) {
             return Score.of(DEFAULT_SCORE, getColor());
         }
         return Score.of(DEDUCTED_SCORE, getColor());
