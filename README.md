@@ -8,8 +8,21 @@
 `grant all privileges on *.* to 'username'@'localhost';`<br>
 `flush privileges;`<br>
 `USE chess;`
-***
 
+3. 테이블 생성<br>
+```
+CREATE TABLE IF NOT EXISTS currentTurn (color VARCHAR(10));
+
+CREATE TABLE IF NOT EXISTS pieceInfo (
+    color VARCHAR(10) NOT NULL, 
+    file VARCHAR(10) NOT NULL, 
+    `rank` VARCHAR(10) NOT NULL, 
+    pieceType VARCHAR(10) NOT NULL,
+    PRIMARY KEY (file, `rank`)
+);
+```
+
+***
 ## 기능 목록
 
 ## DB를 위해 추가된 기능

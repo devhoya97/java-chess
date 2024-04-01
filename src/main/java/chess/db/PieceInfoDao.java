@@ -19,7 +19,6 @@ public class PieceInfoDao {
     private void save(PieceInfo pieceInfo, Connection connection) {
         String query = "INSERT INTO pieceInfo VALUES(?, ?, ?, ?)";
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)){
-            createTableIfNotExists(connection);
             preparedStatement.setString(1, pieceInfo.color());
             preparedStatement.setString(2, pieceInfo.file());
             preparedStatement.setString(3, pieceInfo.rank());
@@ -27,19 +26,6 @@ public class PieceInfoDao {
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        }
-    }
-
-    private void createTableIfNotExists(Connection connection) throws SQLException {
-        try (Statement statement = connection.createStatement()) {
-            String createTableQuery = "CREATE TABLE IF NOT EXISTS pieceInfo (" +
-                    "color VARCHAR(10) NOT NULL, " +
-                    "file VARCHAR(10) NOT NULL, " +
-                    "`rank` VARCHAR(10) NOT NULL, " +
-                    "pieceType VARCHAR(10) NOT NULL, " +
-                    "PRIMARY KEY (file, `rank`)" +
-                    ")";
-            statement.executeUpdate(createTableQuery);
         }
     }
 

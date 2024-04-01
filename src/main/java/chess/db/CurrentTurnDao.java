@@ -16,18 +16,11 @@ public class CurrentTurnDao {
         String query = "INSERT INTO currentTurn VALUES(?)";
         Connection connection = dbConnector.getConnection();
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            createTableIfNotExists(connection);
             deleteAll(connection);
             preparedStatement.setString(1, ColorTranslator.translate(currentTurn.value()));
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        }
-    }
-
-    private void createTableIfNotExists(Connection connection) throws SQLException {
-        try (Statement statement = connection.createStatement()) {
-            statement.executeUpdate("CREATE TABLE IF NOT EXISTS currentTurn (color VARCHAR(10))");
         }
     }
 
