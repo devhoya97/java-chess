@@ -10,14 +10,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class PieceInfoDao {
-    private final DBConnector dbConnector;
-
-    public PieceInfoDao(DBConnector dbConnector) {
-        this.dbConnector = dbConnector;
-    }
 
     public void saveAll(Set<PieceInfo> pieceInfos) {
-        Connection connection = dbConnector.getConnection();
+        Connection connection = DBConnector.getConnection();
         pieceInfos.forEach(pieceInfo -> save(pieceInfo, connection));
     }
 
@@ -36,7 +31,7 @@ public class PieceInfoDao {
 
     public Set<PieceInfo> findAll() {
         String query = "SELECT * FROM pieceInfo";
-        Connection connection = dbConnector.getConnection();
+        Connection connection = DBConnector.getConnection();
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             ResultSet resultSet = preparedStatement.executeQuery();
             return makePieceInfos(resultSet);
@@ -64,7 +59,7 @@ public class PieceInfoDao {
 
     public void deleteAll() {
         String query = "DELETE FROM pieceInfo";
-        Connection connection = dbConnector.getConnection();
+        Connection connection = DBConnector.getConnection();
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
@@ -74,7 +69,7 @@ public class PieceInfoDao {
 
     public void delete(File file, Rank rank) {
         String query = "DELETE FROM pieceInfo WHERE file = ? AND `rank` = ?";
-        Connection connection = dbConnector.getConnection();
+        Connection connection = DBConnector.getConnection();
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, file.name());
             preparedStatement.setString(2, rank.name());
@@ -86,7 +81,7 @@ public class PieceInfoDao {
 
     public boolean isEmpty() {
         String query = "SELECT COUNT(*) FROM pieceInfo";
-        Connection connection = dbConnector.getConnection();
+        Connection connection = DBConnector.getConnection();
         try (PreparedStatement preparedStatement = connection.prepareStatement(query);
             ResultSet resultSet = preparedStatement.executeQuery()) {
             return size(resultSet) == 0;

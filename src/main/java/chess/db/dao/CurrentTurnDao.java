@@ -7,15 +7,9 @@ import chess.domain.square.piece.Color;
 import java.sql.*;
 
 public class CurrentTurnDao {
-    private final DBConnector dbConnector;
-
-    public CurrentTurnDao(DBConnector dbConnector) {
-        this.dbConnector = dbConnector;
-    }
-
     public void save(final CurrentTurn currentTurn) {
         String query = "INSERT INTO currentTurn VALUES(?)";
-        Connection connection = dbConnector.getConnection();
+        Connection connection = DBConnector.getConnection();
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             deleteAll(connection);
             preparedStatement.setString(1, currentTurn.colorName());
@@ -36,7 +30,7 @@ public class CurrentTurnDao {
 
     public void deleteAll() {
         String query = "DELETE FROM currentTurn";
-        Connection connection = dbConnector.getConnection();
+        Connection connection = DBConnector.getConnection();
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
@@ -46,7 +40,7 @@ public class CurrentTurnDao {
 
     public CurrentTurn find() {
         String  query = "SELECT * FROM currentTurn";
-        Connection connection = dbConnector.getConnection();
+        Connection connection = DBConnector.getConnection();
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             ResultSet resultSet = preparedStatement.executeQuery();
             return new CurrentTurn(readColor(resultSet));

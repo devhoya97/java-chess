@@ -21,7 +21,7 @@ class PieceInfoDaoTest {
     private static final Rank TEST_RANK = Rank.FIRST;
     private static final Piece TEST_PIECE = Bishop.from(TEST_COLOR);
 
-    private final PieceInfoDao pieceInfoDao = new PieceInfoDao(new DBConnector());
+    private final PieceInfoDao pieceInfoDao = new PieceInfoDao();
     
     @AfterEach
     void tearDown() {

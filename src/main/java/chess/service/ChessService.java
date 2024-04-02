@@ -30,8 +30,7 @@ public class ChessService {
     }
 
     public static ChessService create() {
-        DBConnector dbConnector = new DBConnector();
-        return new ChessService(new PieceInfoDao(dbConnector), new CurrentTurnDao(dbConnector));
+        return new ChessService(new PieceInfoDao(), new CurrentTurnDao());
     }
 
     public ChessGame loadGame() {

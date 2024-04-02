@@ -21,7 +21,10 @@ public class DBConnector {
         }
     }
 
-    public Connection getConnection() {
+    private DBConnector() {
+    }
+
+    public static Connection getConnection() {
         return connection;
     }
 }
