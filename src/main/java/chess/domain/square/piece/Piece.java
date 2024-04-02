@@ -30,7 +30,7 @@ public abstract class Piece implements Square {
     @Override
     public String toString() {
         return "Piece{" +
-                "color=" + color +
+                "colorName=" + color +
                 '}';
     }
 

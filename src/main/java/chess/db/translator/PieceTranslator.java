@@ -18,19 +18,19 @@ public enum PieceTranslator {
     ROOK("rook", Rook::from, Rook.class),
     PAWN("pawn", Pawn::from, Pawn.class);
 
-    private final String dbView;
+    private final String pieceName;
     private final Function<Color, Piece> translator;
     private final Class<? extends Piece> pieceClass;
 
-    PieceTranslator(String dbView, Function<Color, Piece> translator, Class<? extends Piece> pieceClass) {
-        this.dbView = dbView;
+    PieceTranslator(String pieceName, Function<Color, Piece> translator, Class<? extends Piece> pieceClass) {
+        this.pieceName = pieceName;
         this.translator = translator;
         this.pieceClass = pieceClass;
     }
 
-    public static Piece translate(String dbView, Color color) {
+    public static Piece translate(String pieceName, Color color) {
         return Arrays.stream(PieceTranslator.values())
-                .filter(pieceTranslator -> Objects.equals(pieceTranslator.dbView, dbView))
+                .filter(pieceTranslator -> Objects.equals(pieceTranslator.pieceName, pieceName))
                 .findAny()
                 .map(pieceTranslator -> pieceTranslator.translator.apply(color))
                 .orElseThrow(() -> new IllegalArgumentException("준비된 PieceType이 아닙니다."));
@@ -39,7 +39,7 @@ public enum PieceTranslator {
     public static String translate(Square square) {
         return Arrays.stream(PieceTranslator.values())
                 .filter(pieceTranslator -> Objects.equals(square.getClass(), pieceTranslator.pieceClass))
-                .map(pieceTranslator -> pieceTranslator.dbView)
+                .map(pieceTranslator -> pieceTranslator.pieceName)
                 .findAny()
                 .orElseThrow(() -> new IllegalArgumentException("준비된 PieceType이 아닙니다."));
     }

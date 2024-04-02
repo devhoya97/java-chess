@@ -1,10 +1,8 @@
 package chess.service;
 
 import chess.db.*;
-import chess.db.translator.ColorTranslator;
-import chess.db.translator.FileTranslator;
-import chess.db.translator.PieceTranslator;
-import chess.db.translator.RankTranslator;
+import chess.db.dao.CurrentTurnDao;
+import chess.db.dao.PieceInfoDao;
 import chess.domain.ChessGame;
 import chess.domain.CurrentTurn;
 import chess.domain.board.ChessBoardMaker;
@@ -47,11 +45,11 @@ public class ChessService {
     private void saveSurvivedPieces(ChessGame chessGame) {
         Map<Position, Square> survivedPieces = chessGame.getSurvivedPieces();
         Set<PieceInfo> survivedPieceInfos = survivedPieces.entrySet().stream()
-                .map(entry -> new PieceInfo(
-                        ColorTranslator.translate(entry.getValue().getColor()),
-                        FileTranslator.translate(entry.getKey().file()),
-                        RankTranslator.translate(entry.getKey().rank()),
-                        PieceTranslator.translate(entry.getValue())))
+                .map(entry -> PieceInfo.of(
+                        entry.getValue().getColor(),
+                        entry.getKey().file(),
+                        entry.getKey().rank(),
+                        entry.getValue()))
                 .collect(Collectors.toSet());
         pieceInfoDao.saveAll(survivedPieceInfos);
     }

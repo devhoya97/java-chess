@@ -1,15 +1,13 @@
 package chess.db;
 
-import chess.db.translator.ColorTranslator;
-import chess.db.translator.FileTranslator;
 import chess.db.translator.PieceTranslator;
-import chess.db.translator.RankTranslator;
 import chess.domain.board.ChessBoard;
 import chess.domain.position.File;
 import chess.domain.position.Position;
 import chess.domain.position.Rank;
 import chess.domain.square.Empty;
 import chess.domain.square.Square;
+import chess.domain.square.piece.Color;
 import chess.domain.square.piece.Piece;
 
 import java.util.HashMap;
@@ -27,11 +25,11 @@ public class ChessBoardLoader {
         Map<Position, Square> pieces = new HashMap<>();
         for (PieceInfo pieceInfo : prevSurvivedPieces) {
             Position position = new Position(
-                    RankTranslator.translate(pieceInfo.rank()),
-                    FileTranslator.translate(pieceInfo.file()));
+                    Rank.findByName(pieceInfo.rankName()),
+                    File.findByName(pieceInfo.fileName()));
             Piece piece = PieceTranslator.translate(
-                    pieceInfo.pieceType(),
-                    ColorTranslator.translate(pieceInfo.color()));
+                    pieceInfo.pieceName(),
+                    Color.findByName(pieceInfo.colorName()));
             pieces.put(position, piece);
         }
         return new ChessBoardLoader(pieces);

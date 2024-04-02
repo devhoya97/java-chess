@@ -1,4 +1,7 @@
-package chess.db;
+package chess.db.dao;
+
+import chess.db.DBConnector;
+import chess.db.PieceInfo;
 
 import java.sql.*;
 import java.util.HashSet;
@@ -19,10 +22,10 @@ public class PieceInfoDao {
     private void save(PieceInfo pieceInfo, Connection connection) {
         String query = "INSERT INTO pieceInfo VALUES(?, ?, ?, ?)";
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)){
-            preparedStatement.setString(1, pieceInfo.color());
-            preparedStatement.setString(2, pieceInfo.file());
-            preparedStatement.setString(3, pieceInfo.rank());
-            preparedStatement.setString(4, pieceInfo.pieceType());
+            preparedStatement.setString(1, pieceInfo.colorName());
+            preparedStatement.setString(2, pieceInfo.fileName());
+            preparedStatement.setString(3, pieceInfo.rankName());
+            preparedStatement.setString(4, pieceInfo.pieceName());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);

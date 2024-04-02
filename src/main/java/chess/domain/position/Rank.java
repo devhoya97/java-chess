@@ -1,6 +1,7 @@
 package chess.domain.position;
 
 import java.util.Arrays;
+import java.util.Objects;
 
 public enum Rank {
     FIRST(1),
@@ -31,6 +32,13 @@ public enum Rank {
 
     public int subtract(Rank rank) {
         return value - rank.value;
+    }
+
+    public static Rank findByName(String rankName) {
+    return Arrays.stream(Rank.values())
+            .filter(rank -> Objects.equals(rank.name(), rankName))
+            .findAny()
+            .orElseThrow(() -> new IllegalArgumentException("[" + rankName + "]와(과) 매칭되는 rank가 없습니다."));
     }
 
     public int getValue() {

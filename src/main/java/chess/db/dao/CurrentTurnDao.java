@@ -1,7 +1,8 @@
-package chess.db;
+package chess.db.dao;
 
-import chess.db.translator.ColorTranslator;
+import chess.db.DBConnector;
 import chess.domain.CurrentTurn;
+import chess.domain.square.piece.Color;
 
 import java.sql.*;
 
@@ -17,7 +18,7 @@ public class CurrentTurnDao {
         Connection connection = dbConnector.getConnection();
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             deleteAll(connection);
-            preparedStatement.setString(1, ColorTranslator.translate(currentTurn.value()));
+            preparedStatement.setString(1, currentTurn.colorName());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -50,7 +51,7 @@ public class CurrentTurnDao {
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                 return new CurrentTurn(
-                        ColorTranslator.translate(resultSet.getString("color"))
+                        Color.findByName(resultSet.getString("color"))
                 );
             }
         } catch (SQLException e) {

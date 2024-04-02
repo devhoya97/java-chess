@@ -13,6 +13,10 @@ public class CurrentTurn {
         return new CurrentTurn(currentTurn.opposite());
     }
 
+    public String colorName() {
+        return currentTurn.name();
+    }
+
     public Color value() {
         return currentTurn;
     }
