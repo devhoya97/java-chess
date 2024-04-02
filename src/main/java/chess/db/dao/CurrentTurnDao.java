@@ -49,14 +49,16 @@ public class CurrentTurnDao {
         Connection connection = dbConnector.getConnection();
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             ResultSet resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()) {
-                return new CurrentTurn(
-                        Color.findByName(resultSet.getString("color"))
-                );
-            }
+            return new CurrentTurn(readColor(resultSet));
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        return null;
+    }
+
+    private Color readColor(ResultSet resultSet) throws SQLException {
+        if (resultSet.next()) {
+            return Color.findByName(resultSet.getString("color"));
+        }
+        throw new IllegalStateException("저장된 CurrentTurn이 없습니다.");
     }
 }

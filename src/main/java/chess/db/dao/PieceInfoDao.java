@@ -33,22 +33,31 @@ public class PieceInfoDao {
     }
 
     public Set<PieceInfo> findAll() {
-        Set<PieceInfo> pieceInfos = new HashSet<>();
         String query = "SELECT * FROM pieceInfo";
         Connection connection = dbConnector.getConnection();
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                pieceInfos.add(new PieceInfo(
-                        resultSet.getString("color"),
-                        resultSet.getString("file"),
-                        resultSet.getString("rank"),
-                        resultSet.getString("pieceType")));
-            }
+            return makePieceInfos(resultSet);
         } catch (final SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private Set<PieceInfo> makePieceInfos(ResultSet resultSet) throws SQLException {
+        Set<PieceInfo> pieceInfos = new HashSet<>();
+        while (resultSet.next()) {
+            pieceInfos.add(makePieceInfo(resultSet));
+        }
         return pieceInfos;
+    }
+
+    private PieceInfo makePieceInfo(ResultSet resultSet) throws SQLException {
+        return new PieceInfo(
+                resultSet.getString("color"),
+                resultSet.getString("file"),
+                resultSet.getString("rank"),
+                resultSet.getString("pieceType")
+        );
     }
 
     public void deleteAll() {
@@ -66,13 +75,16 @@ public class PieceInfoDao {
         Connection connection = dbConnector.getConnection();
         try (PreparedStatement preparedStatement = connection.prepareStatement(query);
             ResultSet resultSet = preparedStatement.executeQuery()) {
-            if (resultSet.next()) {
-                int count = resultSet.getInt(1);
-                return count == 0;
-            }
+            return size(resultSet) == 0;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        return true;
+    }
+
+    private int size(ResultSet resultSet) throws SQLException {
+        if (resultSet.next()) {
+            return resultSet.getInt(1);
+        }
+        return 0;
     }
 }
