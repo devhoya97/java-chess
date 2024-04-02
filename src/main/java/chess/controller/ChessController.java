@@ -51,7 +51,7 @@ public class ChessController {
             command = readCommandUnlessKingDied(chessGame);
         }
         chessService.deleteSavedGame();
-        if (doesEnd(chessGame)) {
+        if (chessGame.isOver()) {
             outputView.printEndMessage(chessGame.findWinner());
             return;
         }
@@ -86,14 +86,10 @@ public class ChessController {
     }
 
     private Command readCommandUnlessKingDied(ChessGame chessGame) {
-        if (doesEnd(chessGame)) {
+        if (chessGame.isOver()) {
             return Command.from(CommandType.END);
         }
         return inputView.readCommand();
-    }
-
-    private boolean doesEnd(ChessGame chessGame) {
-        return chessGame.findWinner() != Color.NO_COLOR;
     }
 
     private void saveGameOrNot(ChessGame chessGame, ChessService chessService) {

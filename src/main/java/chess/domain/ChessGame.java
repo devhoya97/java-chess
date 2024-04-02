@@ -35,6 +35,10 @@ public class ChessGame {
         return chessBoard.calculateScore(color);
     }
 
+    public boolean isOver() {
+        return chessBoard.isAnyKingDead();
+    }
+
     public Color findWinner() {
         return chessBoard.findWinner();
     }

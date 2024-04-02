@@ -53,22 +53,26 @@ public class ChessBoard {
     }
 
     public Color findWinner() {
-        if (isKingAlive(Color.WHITE) && isKingAlive(Color.BLACK)) {
-            return Color.NO_COLOR;
+        if (isKingDead(Color.WHITE)) {
+            return Color.BLACK;
         }
-        if (isKingAlive(Color.WHITE)) {
+        if (isKingDead(Color.BLACK)) {
             return Color.WHITE;
         }
-        return Color.BLACK;
+        throw new IllegalStateException("왕이 모두 살아있으면 우승자를 정할 수 없습니다.");
     }
 
-    private boolean isKingAlive(Color color) {
+    public boolean isAnyKingDead() {
+        return isKingDead(Color.WHITE) || isKingDead(Color.BLACK);
+    }
+
+    private boolean isKingDead(Color color) {
         long kingCount = squares.keySet().stream()
                 .map(squares::get)
                 .filter(square -> square.isColor(color) && square instanceof King)
                 .count();
 
-        return kingCount != 0;
+        return kingCount == 0;
     }
 
     public Square findSquare(Position position) {

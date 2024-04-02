@@ -1,6 +1,7 @@
 package chess.domain.board;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import chess.domain.EmptySquaresMaker;
@@ -84,9 +85,7 @@ public class ChessBoardTest {
         squares.put(new Position(Rank.FIRST, File.E), King.from(Color.BLACK));
         ChessBoard chessBoard = new ChessBoard(squares);
 
-        Color winner = chessBoard.findWinner();
-
-        assertThat(winner).isEqualTo(Color.NO_COLOR);
+        assertThatThrownBy(chessBoard::findWinner).isInstanceOf(IllegalStateException.class);
     }
 
     @DisplayName("화이트킹이 죽으면 블랙진영의 승리이다.")
