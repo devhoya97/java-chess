@@ -40,7 +40,13 @@ public class ChessGame {
     }
 
     public Color findWinner() {
-        return chessBoard.findWinner();
+        if (chessBoard.isKingDead(Color.WHITE)) {
+            return Color.BLACK;
+        }
+        if (chessBoard.isKingDead(Color.BLACK)) {
+            return Color.WHITE;
+        }
+        throw new IllegalStateException("왕이 모두 살아있으면 우승자를 정할 수 없습니다.");
     }
 
     public Map<Position, Square> getSurvivedPieces() {

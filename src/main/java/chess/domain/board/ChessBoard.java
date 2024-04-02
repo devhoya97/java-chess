@@ -52,21 +52,11 @@ public class ChessBoard {
                 .collect(Collectors.toSet());
     }
 
-    public Color findWinner() {
-        if (isKingDead(Color.WHITE)) {
-            return Color.BLACK;
-        }
-        if (isKingDead(Color.BLACK)) {
-            return Color.WHITE;
-        }
-        throw new IllegalStateException("왕이 모두 살아있으면 우승자를 정할 수 없습니다.");
-    }
-
     public boolean isAnyKingDead() {
         return isKingDead(Color.WHITE) || isKingDead(Color.BLACK);
     }
 
-    private boolean isKingDead(Color color) {
+    public boolean isKingDead(Color color) {
         long kingCount = squares.keySet().stream()
                 .map(squares::get)
                 .filter(square -> square.isColor(color) && square instanceof King)
