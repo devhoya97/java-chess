@@ -5,11 +5,17 @@ import chess.db.dao.CurrentTurnDao;
 import chess.db.dao.PieceInfoDao;
 import chess.domain.ChessGame;
 import chess.domain.CurrentTurn;
+import chess.domain.board.ChessBoard;
 import chess.domain.board.ChessBoardMaker;
+import chess.domain.position.File;
 import chess.domain.position.Position;
+import chess.domain.position.Rank;
+import chess.domain.square.Empty;
 import chess.domain.square.Square;
 import chess.domain.square.piece.Color;
+import chess.domain.square.piece.Piece;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -30,11 +36,41 @@ public class ChessService {
 
     public ChessGame loadGame() {
         if (pieceInfoDao.isEmpty()) {
-            ChessBoardMaker chessBoardMaker = new ChessBoardMaker();
-            return new ChessGame(new CurrentTurn(Color.WHITE), chessBoardMaker.make());
+            return makeNewGame();
         }
-        ChessBoardLoader chessBoardLoader = ChessBoardLoader.from(pieceInfoDao.findAll());
-        return new ChessGame(currentTurnDao.find(), chessBoardLoader.load());
+        return loadPrevGame();
+    }
+
+    private static ChessGame makeNewGame() {
+        ChessBoardMaker chessBoardMaker = new ChessBoardMaker();
+        return new ChessGame(new CurrentTurn(Color.WHITE), chessBoardMaker.make());
+    }
+
+    private ChessGame loadPrevGame() {
+        Set<PieceInfo> survivedPieceInfos = pieceInfoDao.findAll();
+        Map<Position, Square> newBoard = makeEmptyBoard();
+        for (PieceInfo survivedPieceInfo : survivedPieceInfos) {
+            Position position = new Position(survivedPieceInfo.rank(), survivedPieceInfo.file());
+            Piece survivedPiece = survivedPieceInfo.piece();
+            newBoard.put(position, survivedPiece);
+        }
+        return new ChessGame(currentTurnDao.find(), new ChessBoard(newBoard));
+    }
+
+    private Map<Position, Square> makeEmptyBoard() {
+        final Map<Position, Square> squares = new HashMap<>();
+        for (Rank rank : Rank.values()) {
+            squares.putAll(makeEmptyRank(rank));
+        }
+        return squares;
+    }
+
+    private Map<Position, Square> makeEmptyRank(final Rank rank) {
+        final Map<Position, Square> squares = new HashMap<>();
+        for (File file : File.values()) {
+            squares.put(new Position(rank, file), Empty.getInstance());
+        }
+        return squares;
     }
 
     public void saveGame(ChessGame chessGame) {
