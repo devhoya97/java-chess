@@ -2,6 +2,8 @@ package chess.db.dao;
 
 import chess.db.DBConnector;
 import chess.db.PieceInfo;
+import chess.domain.position.File;
+import chess.domain.position.Rank;
 
 import java.sql.*;
 import java.util.HashSet;
@@ -64,6 +66,18 @@ public class PieceInfoDao {
         String query = "DELETE FROM pieceInfo";
         Connection connection = dbConnector.getConnection();
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void delete(File file, Rank rank) {
+        String query = "DELETE FROM pieceInfo WHERE file = ? AND `rank` = ?";
+        Connection connection = dbConnector.getConnection();
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setString(1, file.name());
+            preparedStatement.setString(2, rank.name());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
