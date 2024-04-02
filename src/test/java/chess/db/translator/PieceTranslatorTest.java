@@ -13,15 +13,15 @@ class PieceTranslatorTest {
     @DisplayName("PieceType에 맞는 dbView를 찾는다.")
     @Test
     void translatePieceTypeToDbView() {
-        String dbView = PieceTranslator.translate(Bishop.from(Color.BLACK));
+        String pieceName = PieceTranslator.translateToName(Bishop.from(Color.BLACK));
 
-        assertThat(dbView).isEqualTo("bishop");
+        assertThat(pieceName).isEqualTo("bishop");
     }
 
     @DisplayName("dbView와 color에 맞는 Piece를 만든다.")
     @Test
     void translateDbViewToPieceType() {
-        Piece piece = PieceTranslator.translate("bishop", Color.WHITE);
+        Piece piece = PieceTranslator.translateToPiece("bishop", Color.WHITE);
 
         assertThat(piece).isEqualTo(Bishop.from(Color.WHITE));
     }

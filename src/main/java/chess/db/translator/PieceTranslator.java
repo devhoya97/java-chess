@@ -28,7 +28,7 @@ public enum PieceTranslator {
         this.pieceClass = pieceClass;
     }
 
-    public static Piece translate(String pieceName, Color color) {
+    public static Piece translateToPiece(String pieceName, Color color) {
         return Arrays.stream(PieceTranslator.values())
                 .filter(pieceTranslator -> Objects.equals(pieceTranslator.pieceName, pieceName))
                 .findAny()
@@ -36,7 +36,7 @@ public enum PieceTranslator {
                 .orElseThrow(() -> new IllegalArgumentException("준비된 PieceType이 아닙니다."));
     }
 
-    public static String translate(Square square) {
+    public static String translateToName(Square square) {
         return Arrays.stream(PieceTranslator.values())
                 .filter(pieceTranslator -> Objects.equals(square.getClass(), pieceTranslator.pieceClass))
                 .map(pieceTranslator -> pieceTranslator.pieceName)

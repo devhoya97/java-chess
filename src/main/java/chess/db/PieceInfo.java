@@ -9,7 +9,7 @@ import chess.domain.square.piece.Piece;
 
 public record PieceInfo(String colorName, String fileName, String rankName, String pieceName) {
     public static PieceInfo of(Color color, File file, Rank rank, Square square) {
-        return new PieceInfo(color.name(), file.name(), rank.name(), PieceTranslator.translate(square));
+        return new PieceInfo(color.name(), file.name(), rank.name(), PieceTranslator.translateToName(square));
     }
 
     public Color color() {
@@ -25,6 +25,6 @@ public record PieceInfo(String colorName, String fileName, String rankName, Stri
     }
 
     public Piece piece() {
-        return PieceTranslator.translate(pieceName, color());
+        return PieceTranslator.translateToPiece(pieceName, color());
     }
 }
