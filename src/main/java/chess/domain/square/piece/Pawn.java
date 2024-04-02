@@ -68,8 +68,8 @@ public class Pawn extends Piece {
     }
 
     @Override
-    public Score score(Set<Square> sameFileSquares) {
-        long otherPawnCountOnSameFile = sameFileSquares.stream()
+    public Score score(Set<Square> otherSquaresOnSameFile) {
+        long otherPawnCountOnSameFile = otherSquaresOnSameFile.stream()
                 .filter(square -> square == this)
                 .count();
         if (otherPawnCountOnSameFile == 0) {
