@@ -25,11 +25,8 @@ public class ChessBoardLoader {
         Map<Position, Square> pieces = new HashMap<>();
         for (PieceInfo pieceInfo : prevSurvivedPieces) {
             Position position = new Position(
-                    Rank.findByName(pieceInfo.rankName()),
-                    File.findByName(pieceInfo.fileName()));
-            Piece piece = PieceTranslator.translate(
-                    pieceInfo.pieceName(),
-                    Color.findByName(pieceInfo.colorName()));
+                    Rank.findByName(pieceInfo.rankName()), File.findByName(pieceInfo.fileName()));
+            Piece piece = PieceTranslator.translate(pieceInfo.pieceName(), Color.findByName(pieceInfo.colorName()));
             pieces.put(position, piece);
         }
         return new ChessBoardLoader(pieces);
